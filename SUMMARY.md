@@ -10,3 +10,4 @@
   * [8. Traction & Roadmap](recohubz-pitch-deck-1.-executive-summary/8.-traction-and-roadmap.md)
   * [9. Team & Advisors](recohubz-pitch-deck-1.-executive-summary/9.-team-and-advisors.md)
   * [10. Call to Action](recohubz-pitch-deck-1.-executive-summary/10.-call-to-action.md)
+* [RecoHubz – Pre-Seed Pitch Deck](recohubz-pre-seed-pitch-deck.md)
