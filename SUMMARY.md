@@ -3,7 +3,7 @@
 * [RecoHubz Pitch Deck: 1. Executive Summary](README.md)
   * [2. Problem](recohubz-pitch-deck-1.-executive-summary/2.-problem.md)
   * [3. Solution](recohubz-pitch-deck-1.-executive-summary/3.-solution.md)
-  * [4. Technology Stack](recohubz-pitch-deck-1.-executive-summary/4.-technology-stack.md)
+  * [4. Technology](recohubz-pitch-deck-1.-executive-summary/4.-technology.md)
   * [5. DAO Governance Model](recohubz-pitch-deck-1.-executive-summary/5.-dao-governance-model.md)
   * [6. The RecoHubz Economy\*](recohubz-pitch-deck-1.-executive-summary/6.-the-recohubz-economy.md)
   * [7. Opportunity](recohubz-pitch-deck-1.-executive-summary/7.-opportunity.md)
