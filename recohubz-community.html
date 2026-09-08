@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RecoHubz – Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #0F6E56; --teal-lt: #1D9E75;
+    --dark: #0D1A14; --mid: #1A2D24; --mid2: #162720;
+    --white: #FFFFFF; --border: rgba(29,158,117,0.12);
+    --gold: #C89B3C;
+  }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); display: flex; flex-direction: column; }
+
+  .topnav {
+    height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.2rem; background: var(--mid2); border-bottom: 1px solid var(--border); z-index: 10;
+  }
+  .topnav-left { display: flex; align-items: center; gap: 0.75rem; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--white); text-decoration: none; }
+  .logo span { color: var(--teal-lt); }
+  .channel-title { font-size: 0.85rem; color: rgba(255,255,255,0.45); padding-left: 0.75rem; border-left: 1px solid rgba(255,255,255,0.08); }
+  .channel-title strong { color: var(--white); }
+  .topnav-right { display: flex; align-items: center; gap: 1rem; }
+  .online-badge { font-size: 0.72rem; color: var(--teal-lt); background: rgba(29,158,117,0.1); padding: 0.22rem 0.7rem; border-radius: 50px; border: 1px solid rgba(29,158,117,0.22); }
+  .home-link { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+  .home-link:hover { color: var(--white); }
+
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { width: 240px; flex-shrink: 0; background: var(--mid2); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+  .sidebar-section { padding: 1rem 0.6rem 0.4rem; }
+  .sidebar-section-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 0 0.5rem; margin-bottom: 0.35rem; }
+  .channel-item { display: flex; align-items: center; gap: 0.55rem; padding: 0.45rem 0.7rem; border-radius: 7px; cursor: pointer; transition: background 0.15s; font-size: 0.84rem; color: rgba(255,255,255,0.45); margin-bottom: 1px; }
+  .channel-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .channel-item.active { background: rgba(29,158,117,0.14); color: var(--white); }
+  .channel-item.active .ch-hash { color: var(--teal-lt); }
+  .ch-hash { font-size: 0.95rem; color: rgba(255,255,255,0.2); flex-shrink: 0; }
+  .ch-name { flex: 1; line-height: 1.3; }
+  .ch-badge { font-size: 0.62rem; background: var(--teal-lt); color: var(--white); padding: 0.08rem 0.38rem; border-radius: 50px; font-weight: 500; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 0.5rem 0.6rem; }
+  .sidebar-user { margin-top: auto; padding: 0.7rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 0.65rem; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--teal-lt)); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 0.78rem; font-weight: 500; }
+  .user-status { font-size: 0.67rem; color: var(--teal-lt); display: flex; align-items: center; gap: 0.25rem; }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal-lt); }
+  .anon-tag { font-size: 0.62rem; color: rgba(255,255,255,0.22); }
+
+  /* MAIN AREA */
+  .chat-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* TABS */
+  .channel-header { padding: 0 1.5rem; border-bottom: 1px solid var(--border); background: var(--dark); flex-shrink: 0; }
+  .channel-header-top { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0 0; }
+  .channel-header-top h2 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+  .channel-header-top p { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 0.15rem; }
+  .tabs { display: flex; gap: 0; margin-top: 0.75rem; }
+  .tab {
+    padding: 0.55rem 1.1rem; font-size: 0.8rem; cursor: pointer; transition: all 0.18s;
+    color: rgba(255,255,255,0.35); border-bottom: 2px solid transparent;
+    font-weight: 400;
+  }
+  .tab:hover { color: rgba(255,255,255,0.7); }
+  .tab.active { color: var(--white); border-bottom-color: var(--teal-lt); font-weight: 500; }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .tab-panel.active { display: flex; }
+
+  /* CHAT */
+  .messages { flex: 1; overflow-y: auto; padding: 1.2rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .day-divider { display: flex; align-items: center; gap: 0.8rem; color: rgba(255,255,255,0.18); font-size: 0.7rem; }
+  .day-divider::before, .day-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+  .message { display: flex; gap: 0.8rem; }
+  .message:hover .msg-text { color: rgba(255,255,255,0.85); }
+  .msg-avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+  .msg-body { flex: 1; }
+  .msg-header { display: flex; align-items: baseline; gap: 0.55rem; margin-bottom: 0.18rem; }
+  .msg-name { font-size: 0.85rem; font-weight: 500; }
+  .msg-time { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+  .msg-text { font-size: 0.85rem; line-height: 1.65; color: rgba(255,255,255,0.7); }
+  .system-msg { text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.2); padding: 0.45rem 1rem; background: rgba(29,158,117,0.04); border-radius: 8px; border: 1px solid rgba(29,158,117,0.08); }
+  .reaction-bar { display: flex; gap: 0.35rem; margin-top: 0.35rem; flex-wrap: wrap; }
+  .reaction { display: inline-flex; align-items: center; gap: 0.25rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 50px; padding: 0.12rem 0.55rem; font-size: 0.75rem; cursor: pointer; transition: all 0.15s; color: rgba(255,255,255,0.55); }
+  .reaction:hover { background: rgba(29,158,117,0.08); }
+  .reaction.active { background: rgba(29,158,117,0.14); border-color: rgba(29,158,117,0.35); color: var(--teal-lt); }
+
+  .msg-input-wrap { padding: 0.85rem 1.5rem 1rem; flex-shrink: 0; }
+  .msg-input-box { display: flex; align-items: center; gap: 0.65rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 0.65rem 0.9rem; transition: border-color 0.2s; }
+  .msg-input-box:focus-within { border-color: rgba(29,158,117,0.35); }
+  .msg-input { flex: 1; background: transparent; border: none; outline: none; color: var(--white); font-size: 0.85rem; font-family: 'DM Sans', sans-serif; }
+  .msg-input::placeholder { color: rgba(255,255,255,0.18); }
+  .send-btn { background: var(--teal-lt); border: none; border-radius: 7px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+  .send-btn:hover { background: var(--teal); }
+  .send-btn svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2; }
+  .input-hint { font-size: 0.67rem; color: rgba(255,255,255,0.15); margin-top: 0.35rem; text-align: center; }
+
+  /* RESOURCES TAB */
+  .resources-panel { flex: 1; overflow-y: auto; padding: 1.5rem; }
+  .resources-panel::-webkit-scrollbar { width: 4px; }
+  .resources-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+  .res-section { margin-bottom: 2rem; }
+  .res-section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .res-section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .res-section-icon.a { background: rgba(29,158,117,0.12); }
+  .res-section-icon.b { background: rgba(200,155,60,0.12); }
+  .res-section-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; }
+  .res-tag { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 50px; margin-left: auto; }
+  .res-tag.free { background: rgba(29,158,117,0.1); color: var(--teal-lt); border: 1px solid rgba(29,158,117,0.18); }
+  .res-tag.beta { background: rgba(200,155,60,0.1); color: var(--gold); border: 1px solid rgba(200,155,60,0.18); }
+  .res-desc { font-size: 0.78rem; color: rgba(255,255,255,0.35); line-height: 1.55; margin-bottom: 0.9rem; }
+  .res-city-label { font-size: 0.67rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin: 0.7rem 0 0.4rem; }
+  .resource-links { display: flex; flex-direction: column; gap: 0.45rem; }
+  .resource-link { display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 9px; text-decoration: none; color: var(--white); font-size: 0.8rem; transition: all 0.18s; }
+  .resource-link:hover { background: rgba(29,158,117,0.07); border-color: rgba(29,158,117,0.22); }
+  .r-icon { font-size: 0.95rem; flex-shrink: 0; }
+  .r-body { flex: 1; }
+  .r-name { font-weight: 500; display: block; }
+  .r-detail { font-size: 0.7rem; color: rgba(255,255,255,0.28); display: block; margin-top: 0.08rem; }
+  .r-arrow { color: rgba(255,255,255,0.18); font-size: 0.75rem; }
+
+  .beta-box { background: rgba(200,155,60,0.05); border: 1px solid rgba(200,155,60,0.15); border-radius: 14px; padding: 1.4rem; text-align: center; }
+  .beta-badge-sm { display: inline-block; background: rgba(200,155,60,0.1); border: 1px solid rgba(200,155,60,0.22); color: var(--gold); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 50px; margin-bottom: 0.7rem; }
+  .beta-box h4 { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .beta-box p { font-size: 0.75rem; color: rgba(255,255,255,0.32); line-height: 1.6; margin-bottom: 0.9rem; }
+  .beta-items { display: flex; flex-direction: column; gap: 0.35rem; }
+  .beta-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.02); border-radius: 7px; font-size: 0.75rem; color: rgba(255,255,255,0.38); }
+  .bi-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; flex-shrink: 0; }
+
+  /* JOB BOARD */
+  .jobboard-panel { flex: 1; overflow-y: auto; padding: 1.2rem 1.5rem; }
+  .jobboard-panel::-webkit-scrollbar { width: 4px; }
+  .jobboard-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+  .jb-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.2rem; }
+  .jb-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .jb-filter { padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.18s; }
+  .jb-filter:hover { border-color: rgba(29,158,117,0.35); color: var(--white); }
+  .jb-filter.active { background: rgba(29,158,117,0.14); border-color: rgba(29,158,117,0.4); color: var(--white); }
+  .jb-count { font-size: 0.75rem; color: rgba(255,255,255,0.25); }
+  .jb-listings { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .jb-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 1.1rem 1.2rem; transition: all 0.2s; }
+  .jb-card:hover { background: rgba(29,158,117,0.06); border-color: rgba(29,158,117,0.22); }
+  .jb-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .jb-card-left { flex: 1; }
+  .jb-title { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .jb-employer { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+  .jb-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.65rem; }
+  .jb-tag { font-size: 0.65rem; font-weight: 500; padding: 0.15rem 0.55rem; border-radius: 50px; }
+  .jb-tag.sector { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.08); }
+  .jb-tag.type { background: rgba(29,158,117,0.1); color: var(--teal-lt); border: 1px solid rgba(29,158,117,0.2); }
+  .jb-tag.volunteer { background: rgba(200,155,60,0.1); color: var(--gold); border: 1px solid rgba(200,155,60,0.2); }
+  .jb-tag.web3 { background: rgba(100,80,200,0.12); color: #a89cff; border: 1px solid rgba(100,80,200,0.2); }
+  .jb-tag.pledge { background: rgba(29,158,117,0.08); color: var(--teal-lt); border: 1px solid rgba(29,158,117,0.15); }
+  .jb-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .jb-salary { font-size: 0.82rem; font-weight: 500; color: var(--white); }
+  .jb-location { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+  .jb-card-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; flex-shrink: 0; }
+  .jb-apply { background: var(--teal-lt); color: var(--white); border: none; border-radius: 50px; padding: 0.45rem 1rem; font-size: 0.78rem; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; text-decoration: none; display: inline-block; }
+  .jb-apply:hover { background: var(--teal); }
+  .jb-apply.volunteer-btn { background: rgba(200,155,60,0.2); color: var(--gold); border: 1px solid rgba(200,155,60,0.3); }
+  .jb-apply.volunteer-btn:hover { background: rgba(200,155,60,0.3); }
+  .jb-new { font-size: 0.62rem; color: var(--teal-lt); background: rgba(29,158,117,0.1); padding: 0.12rem 0.45rem; border-radius: 50px; border: 1px solid rgba(29,158,117,0.2); }
+
+  .jb-section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin: 1.2rem 0 0.6rem; }
+  .jb-external { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.5rem; }
+  .jb-ext-link { display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; text-decoration: none; color: var(--white); font-size: 0.8rem; transition: all 0.18s; }
+  .jb-ext-link:hover { background: rgba(29,158,117,0.07); border-color: rgba(29,158,117,0.2); }
+  .jb-ext-icon { font-size: 1rem; flex-shrink: 0; }
+  .jb-ext-body { flex: 1; }
+  .jb-ext-name { font-weight: 500; display: block; }
+  .jb-ext-detail { font-size: 0.7rem; color: rgba(255,255,255,0.28); display: block; margin-top: 0.05rem; }
+  .jb-pledge-box { background: rgba(29,158,117,0.05); border: 1px solid rgba(29,158,117,0.15); border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 1.2rem; }
+  .jb-pledge-title { font-size: 0.78rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--teal-lt); }
+  .jb-pledge-items { display: flex; flex-direction: column; gap: 0.3rem; }
+  .jb-pledge-item { font-size: 0.73rem; color: rgba(255,255,255,0.38); display: flex; gap: 0.5rem; }
+  .jb-pledge-item::before { content: '✓'; color: var(--teal-lt); flex-shrink: 0; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-left">
+    <a href="recohubz-landing.html" class="logo">Reco<span>Hubz</span></a>
+    <div class="channel-title"><strong id="active-ch-name"># general</strong></div>
+  </div>
+  <div class="topnav-right">
+    <div class="online-badge">🟢 142 anonymous members online</div>
+    <a href="recohubz-landing.html" class="home-link">← Home</a>
+  </div>
+</div>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Channels</div>
+      <div class="channel-item active" onclick="switchChannel(this,'general')"><span class="ch-hash">#</span><span class="ch-name">general</span><span class="ch-badge">3</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'recovery-support')"><span class="ch-hash">#</span><span class="ch-name">recovery-support</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'behavioural-addictions')"><span class="ch-hash">#</span><span class="ch-name">behavioural-addictions</span><span class="ch-badge">2</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'alcohol-substances')"><span class="ch-hash">#</span><span class="ch-name">alcohol-substances</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'mental-health-trauma')"><span class="ch-hash">#</span><span class="ch-name">mental-health-trauma</span><span class="ch-badge">5</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'spirituality-mindfulness')"><span class="ch-hash">#</span><span class="ch-name">spirituality-mindfulness</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'employment-new-starts')"><span class="ch-hash">#</span><span class="ch-name">employment-new-starts</span></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Resources</div>
+      <div class="channel-item" onclick="switchChannel(this,'aa-ca-resources')"><span class="ch-hash">📚</span><span class="ch-name">aa-ca-resources</span></div>
+      <div class="channel-item" onclick="switchChannel(this,'job-board')"><span class="ch-hash">💼</span><span class="ch-name">job-board</span></div>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar">A7</div>
+      <div class="user-info"><div class="user-name">Anon#4821</div><div class="user-status"><div class="status-dot"></div>Active</div></div>
+      <div class="anon-tag">ZK ✓</div>
+    </div>
+  </div>
+
+  <!-- CHAT AREA -->
+  <div class="chat-area">
+    <div class="channel-header">
+      <div class="channel-header-top">
+        <div>
+          <h2 id="ch-title"># general — Welcome</h2>
+          <p id="ch-desc">A warm space for all members, friends, families and employers.</p>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('chat')">💬 Community Chat</div>
+        <div class="tab" onclick="switchTab('resources')">📚 Resources & Services</div>
+        <div class="tab" id="tab-jobboard-btn" onclick="switchTab('jobboard')" style="display:none;">💼 Job Board</div>
+      </div>
+    </div>
+
+    <!-- CHAT TAB -->
+    <div class="tab-panel active" id="tab-chat">
+      <div class="messages" id="messages-area"></div>
+      <div class="msg-input-wrap">
+        <div class="msg-input-box">
+          <input class="msg-input" id="msg-input" type="text" placeholder="Message anonymously..." onkeydown="handleKey(event)" />
+          <button class="send-btn" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="input-hint">🔒 Anonymous · ZK verified · No identity stored</div>
+      </div>
+    </div>
+
+    <!-- RESOURCES TAB -->
+    <div class="tab-panel" id="tab-resources">
+      <div class="resources-panel" id="resources-panel"></div>
+    </div>
+
+    <!-- JOB BOARD TAB -->
+    <div class="tab-panel" id="tab-jobboard">
+      <div class="jobboard-panel" id="jobboard-panel"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const channels = {
+  'general': {
+    title: '# general — Welcome',
+    desc: 'A warm space for all members, friends, families and employers.',
+    placeholder: 'Message #general anonymously...',
+    resources: {
+      area: 'general',
+      subADesc: 'Support for families, loved ones and employers affected by addiction.',
+      subBItems: ['Family peer support circles','Employer guidance sessions','Friends & family therapy referrals','Community welcome events'],
+    },
+    messages: [
+      { avatar:'M3', color:'#2D7A5F', name:'Anon#2847', time:'Today at 9:02 AM', text:'Morning everyone 🌱 Day 47 for me today. Just wanted to check in.', reactions:[['💚',12,true],['🙌',8,false]] },
+      { avatar:'R9', color:'#1D9E75', name:'Anon#0193', time:'Today at 9:15 AM', text:'Day 47 is massive. Well done. Keep going 💪', reactions:[] },
+      { avatar:'K1', color:'#0F6E56', name:'Anon#7734', time:'Today at 9:22 AM', text:'Just joined today. Not sure where to start but this feels safe already. Thank you for building this.', reactions:[['💚',24,false],['🤝',11,false]] },
+      { system:true, text:'RecoHubz AI Guide — Welcome Anon#7734! Head to #recovery-support to find your pathway, or browse any channel. You\'re among friends.' },
+      { avatar:'P5', color:'#3A8C6E', name:'Anon#5512', time:'Today at 10:01 AM', text:'Three months ago I couldn\'t talk about any of this. Now here I am. If you\'re new — stay. It gets better.', reactions:[['💚',41,true],['🙏',19,false]] },
+    ]
+  },
+  'recovery-support': {
+    title: '# recovery-support',
+    desc: 'Share your journey, celebrate milestones, support others. All pathways welcome.',
+    placeholder: 'Share your journey...',
+    resources: {
+      area: 'recovery',
+      subADesc: 'Evidence-based recovery programmes, fellowships and peer support services.',
+      subBItems: ['Personalised recovery planning','Milestone tracking on-chain','Relapse prevention toolkit','Recovery coach matching'],
+    },
+    messages: [
+      { avatar:'T2', color:'#1D9E75', name:'Anon#3301', time:'Yesterday at 6:44 PM', text:'Had a really hard day. Didn\'t use. That\'s the win. Sometimes that\'s all it is.', reactions:[['💚',33,false],['🏆',15,true]] },
+      { avatar:'J8', color:'#0F6E56', name:'Anon#8821', time:'Yesterday at 7:12 PM', text:'That IS the win. One day at a time. Proud of you.', reactions:[] },
+      { day:'Today' },
+      { avatar:'L4', color:'#2D7A5F', name:'Anon#1147', time:'Today at 8:30 AM', text:'Starting CBT next week through the pathway RecoHubz suggested. Nervous but ready. Anyone been through it?', reactions:[['🙏',7,false]] },
+      { avatar:'N6', color:'#3A8C6E', name:'Anon#4490', time:'Today at 8:45 AM', text:'CBT changed everything for me. Stick with it even when it feels uncomfortable — especially then. DM me if you want to chat.', reactions:[['💚',9,false],['👍',5,false]] },
+    ]
+  },
+  'behavioural-addictions': {
+    title: '# behavioural-addictions',
+    desc: 'Gambling, trading addiction (crypto, prediction markets) and social media compulsion.',
+    placeholder: 'This is a safe space — share openly...',
+    resources: {
+      area: 'behavioural',
+      subADesc: 'Free UK services for gambling, trading addiction and social media compulsion. City-specific services listed where available.',
+      subBItems: ['Behavioural addiction one-to-one sessions','Gambling harm financial coaching','Trading compulsion group therapy','Digital detox planning support'],
+    },
+    messages: [
+      { system:true, text:'This channel covers gambling, crypto/trading addiction and social media compulsion. Type /crisis for immediate support.' },
+      { avatar:'W5', color:'#1D9E75', name:'Anon#8823', time:'Today at 8:00 AM', text:'Lost £4k last month on sports betting. First time admitting it anywhere. Don\'t even know why I\'m here but I couldn\'t keep it inside anymore.', reactions:[['💚',19,false],['🤝',14,false]] },
+      { avatar:'X2', color:'#0F6E56', name:'Anon#2214', time:'Today at 8:10 AM', text:'You\'re here and that matters more than you know. I was where you are 8 months ago. The fact you\'re talking is already step one. We\'ve got you.', reactions:[['💚',21,true]] },
+      { avatar:'Y7', color:'#3A8C6E', name:'Anon#6601', time:'Today at 8:25 AM', text:'I got deep into crypto leverage trading — couldn\'t stop even when I was losing everything. GamCare helped massively. Check the Resources tab for links. You\'re not alone in this.', reactions:[['🙏',9,false],['💚',7,false]] },
+    ]
+  },
+  'alcohol-substances': {
+    title: '# alcohol-substances',
+    desc: 'A judgment-free space for alcohol and substance use recovery.',
+    placeholder: 'Share your experience or ask for support...',
+    resources: {
+      area: 'alcohol',
+      subADesc: 'Free UK meetings, helplines and treatment services for alcohol and substance use. National and city-specific links included.',
+      subBItems: ['Detox pathway referrals','Substance use one-to-one sessions','AA/NA meeting finder integration','Harm reduction planning'],
+    },
+    messages: [
+      { avatar:'Q3', color:'#2D7A5F', name:'Anon#4418', time:'Yesterday at 11:30 PM', text:'Bad night. Nearly broke 90 days. Called a friend instead. Still here. Still sober.', reactions:[['💚',45,true],['🏆',31,false],['🙏',22,false]] },
+      { day:'Today' },
+      { avatar:'R8', color:'#1D9E75', name:'Anon#7723', time:'Today at 7:15 AM', text:'That call you made saved those 90 days. That\'s the skill — knowing who to reach for. You\'re stronger than you think.', reactions:[] },
+      { avatar:'S1', color:'#0F6E56', name:'Anon#0091', time:'Today at 9:00 AM', text:'Week 1 starting today. Scared but determined. Any tips for the first few days?', reactions:[['💚',12,false]] },
+      { avatar:'T6', color:'#3A8C6E', name:'Anon#5534', time:'Today at 9:20 AM', text:'Hydrate constantly. Tell one person IRL if you can. Don\'t isolate. Come here whenever the urge hits — we\'re always on. You can do week 1. 💚', reactions:[['💚',16,false],['🙌',8,true]] },
+    ]
+  },
+  'mental-health-trauma': {
+    title: '# mental-health-trauma',
+    desc: 'Complex trauma, PTSD, anxiety, depression and the mental health dimensions of recovery.',
+    placeholder: 'Share safely — this space is here for you...',
+    resources: {
+      area: 'mental-health',
+      subADesc: 'Free UK mental health services, helplines and NHS referral pathways. City-specific services listed where available.',
+      subBItems: ['Trauma-informed one-to-one sessions','EMDR & somatic therapy referrals','Dual diagnosis pathway support','Crisis peer support network'],
+    },
+    messages: [
+      { system:true, text:'Safe space. If you are in crisis please reach out to Samaritans: 116 123 (free, 24/7). Type /crisis for more.' },
+      { avatar:'U4', color:'#1D9E75', name:'Anon#3302', time:'Today at 7:45 AM', text:'Starting to realise my addiction was masking C-PTSD. It\'s a lot to sit with. Has anyone navigated both at the same time?', reactions:[['💚',11,false],['🤝',8,false]] },
+      { avatar:'V9', color:'#0F6E56', name:'Anon#1190', time:'Today at 8:00 AM', text:'Dual diagnosis is really common. EMDR therapy was life-changing for my trauma alongside addiction work. Check the Resources tab for NHS referral links.', reactions:[['💚',14,true],['🙏',9,false]] },
+      { avatar:'W2', color:'#2D7A5F', name:'Anon#8871', time:'Today at 8:30 AM', text:'You\'re not alone. So many of us here are carrying both. The triage pathway can map a combined plan — both need treating together.', reactions:[['💚',17,false]] },
+    ]
+  },
+  'spirituality-mindfulness': {
+    title: '# spirituality-mindfulness',
+    desc: 'Meditation, prayer, meaning-making and the inner journey of recovery.',
+    placeholder: 'Share a reflection or practice...',
+    resources: {
+      area: 'spirituality',
+      subADesc: 'Mindfulness courses, meditation resources and spiritual recovery frameworks — secular and faith-based.',
+      subBItems: ['Guided meditation sessions','Spiritual recovery circles','Meaning & values coaching','Secular mindfulness programmes'],
+    },
+    messages: [
+      { avatar:'F2', color:'#3A8C6E', name:'Anon#1823', time:'Today at 6:00 AM', text:'Morning meditation done. 10 minutes of silence before the day begins. Highly recommend. 🌅', reactions:[['🙏',18,true],['🌱',12,false]] },
+      { avatar:'G9', color:'#1D9E75', name:'Anon#5507', time:'Today at 6:45 AM', text:'"We are not human beings having a spiritual experience. We are spiritual beings having a human experience." Felt right to share today.', reactions:[['💚',22,false],['🙏',16,false]] },
+      { avatar:'H4', color:'#0F6E56', name:'Anon#3341', time:'Today at 8:15 AM', text:'Does anyone find the AA spiritual framework hard to connect with? Looking for secular alternatives.', reactions:[['💚',6,false]] },
+      { avatar:'I1', color:'#2D7A5F', name:'Anon#7712', time:'Today at 8:30 AM', text:'SMART Recovery is secular. Also try ACT therapy — addresses values and meaning without religious framing. Resources tab has links.', reactions:[['👍',11,false],['💚',8,true]] },
+    ]
+  },
+  'employment-new-starts': {
+    title: '# employment-new-starts',
+    desc: 'CV help, job listings, interview support and rebuilding your professional life.',
+    placeholder: 'Ask about jobs or share opportunities...',
+    resources: {
+      area: 'employment',
+      subADesc: 'Free UK employment support services, benefits advice and recovery-friendly employers.',
+      subBItems: ['CV review & gap coaching','Interview preparation sessions','Job board (RecoHubz listings)','On-chain work reputation building'],
+    },
+    messages: [
+      { avatar:'B3', color:'#1D9E75', name:'Anon#6612', time:'Today at 7:00 AM', text:'Has anyone had to explain a gap in their CV? Not sure how to handle the 2 years I lost.', reactions:[['💚',5,false]] },
+      { avatar:'C7', color:'#0F6E56', name:'Anon#2290', time:'Today at 7:20 AM', text:'"Personal development and health focus" is honest and professional. Employers who push beyond that aren\'t employers you want.', reactions:[['🙌',14,true],['💚',10,false]] },
+      { system:true, text:'RecoHubz Job Board — 3 new listings added today. Check #job-board for remote-friendly, recovery-aware employers.' },
+      { avatar:'D1', color:'#2D7A5F', name:'Anon#9934', time:'Today at 9:10 AM', text:'I got a job offer today. First interview in 4 years. This community helped me prep. It\'s possible. 🙏', reactions:[['🎉',38,false],['💚',29,true],['🏆',17,false]] },
+    ]
+  },
+  'aa-ca-resources': {
+    title: '📚 aa-ca-resources',
+    desc: 'Curated, verified links to fellowships, charities and recovery tools.',
+    placeholder: 'Suggest a resource...',
+    resources: { area: 'recovery', subADesc: 'Browse the Resources tab for the full verified library.', subBItems: [] },
+    messages: [
+      { system:true, text:'Verified resource library — curated by the RecoHubz addiction team.' },
+      { avatar:'📖', color:'#0F6E56', name:'RecoHubz Team', time:'Pinned', text:'🔗 AA UK — aa.org.uk\n🔗 NA UK — ukna.org\n🔗 CA UK — cauk.org.uk\n🔗 GamCare — gamcare.org.uk\n🔗 SMART Recovery — smartrecovery.org.uk\n🔗 Mind — mind.org.uk\n🔗 Samaritans — 116 123 (free 24/7)', reactions:[['📌',52,true]] },
+    ]
+  },
+  'job-board': {
+    title: '💼 job-board',
+    desc: 'Recovery-aware job listings. Employers who have signed the RecoHubz Employer Pledge.',
+    placeholder: 'Post a job or ask about a listing...',
+    resources: { area: 'employment', subADesc: 'Browse the Resources tab for employment support services.', subBItems: [] },
+    messages: [
+      { system:true, text:'All employers here have signed the RecoHubz Employer Pledge — supportive of those in recovery, no discrimination.' },
+      { avatar:'💼', color:'#0F6E56', name:'RecoHubz Jobs', time:'Today', text:'🟢 Remote Customer Support Analyst · TechCare Ltd · £24–28k · Flexible hours · Recovery-friendly ✓\n\n🟢 Peer Support Worker · Mind UK · £21k · Lived experience valued · Part time available\n\n🟢 Data Entry & Admin · AdminPro · £18k · Fully remote · No CV gaps questioned', reactions:[['💼',14,false],['🙌',9,true]] },
+      { avatar:'A3', color:'#2D7A5F', name:'Anon#2291', time:'Today at 10:00 AM', text:'Applied for the Peer Support Worker role. My lived experience finally feels like an asset. Thank you for this.', reactions:[['💚',23,true],['🎉',11,false]] },
+    ]
+  },
+};
+
+// Resource data (national + city)
+const resourceData = {
+  general: {
+    national: [
+      { icon:'🔗', name:'Adfam', detail:'adfam.org.uk · For families affected by addiction', url:'https://www.adfam.org.uk' },
+      { icon:'🔗', name:'Al-Anon UK', detail:'al-anonuk.org.uk · Families of alcoholics', url:'https://www.al-anonuk.org.uk' },
+      { icon:'🔗', name:'Nacoa', detail:'nacoa.org.uk · Children of addicted parents', url:'https://www.nacoa.org.uk' },
+      { icon:'🔗', name:'ACAS', detail:'acas.org.uk · Employer & workplace guidance', url:'https://www.acas.org.uk' },
+      { icon:'🔗', name:'Mind UK', detail:'mind.org.uk · Mental health for all', url:'https://www.mind.org.uk' },
+    ]
+  },
+  recovery: {
+    national: [
+      { icon:'🔗', name:'SMART Recovery UK', detail:'smartrecovery.org.uk · Evidence-based recovery', url:'https://www.smartrecovery.org.uk' },
+      { icon:'🔗', name:'With You (Addaction)', detail:'wearewithyou.org.uk · Drug & alcohol support', url:'https://www.wearewithyou.org.uk' },
+      { icon:'🔗', name:'Turning Point', detail:'turning-point.co.uk · Recovery services UK', url:'https://www.turning-point.co.uk' },
+      { icon:'🔗', name:'AA UK', detail:'aa.org.uk · 12-step recovery', url:'https://www.aa.org.uk' },
+    ]
+  },
+  behavioural: {
+    national: [
+      { icon:'🔗', name:'GamCare', detail:'gamcare.org.uk · Gambling support helpline', url:'https://www.gamcare.org.uk' },
+      { icon:'🔗', name:'Gamblers Anonymous UK', detail:'gamblersanonymous.org.uk', url:'https://www.gamblersanonymous.org.uk' },
+      { icon:'🔗', name:'NHS Gambling Harm Service', detail:'nhs.uk · Free NHS treatment', url:'https://www.nhs.uk/live-well/addiction-support/gambling-addiction' },
+      { icon:'🔗', name:'SMART Recovery UK', detail:'smartrecovery.org.uk · Behavioural addiction', url:'https://www.smartrecovery.org.uk' },
+      { icon:'🔗', name:'The Mix', detail:'themix.org.uk · Under 25s · Social media & gaming', url:'https://www.themix.org.uk' },
+    ],
+    london: [{ icon:'📍', name:'GamCare London Clinic', detail:'Face-to-face counselling · gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+    birmingham: [{ icon:'📍', name:'GamCare West Midlands', detail:'gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+    manchester: [{ icon:'📍', name:'GamCare North West', detail:'gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+    leeds: [{ icon:'📍', name:'GamCare Yorkshire', detail:'gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+    liverpool: [{ icon:'📍', name:'GamCare North West', detail:'gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+    brighton: [{ icon:'📍', name:'GamCare South East', detail:'gamcare.org.uk', url:'https://www.gamcare.org.uk' }],
+  },
+  alcohol: {
+    national: [
+      { icon:'🔗', name:'Alcoholics Anonymous UK', detail:'aa.org.uk · Meetings nationwide', url:'https://www.aa.org.uk' },
+      { icon:'🔗', name:'Narcotics Anonymous UK', detail:'ukna.org · Online & in-person', url:'https://www.ukna.org' },
+      { icon:'🔗', name:'Cocaine Anonymous UK', detail:'cauk.org.uk', url:'https://www.cauk.org.uk' },
+      { icon:'🔗', name:'Drinkaware', detail:'drinkaware.co.uk · Self-assessment tools', url:'https://www.drinkaware.co.uk' },
+      { icon:'🔗', name:'Talk to Frank', detail:'talktofrank.com · Drug info & advice', url:'https://www.talktofrank.com' },
+    ],
+    london: [{ icon:'📍', name:'AA London Region', detail:'londonaa.org.uk', url:'https://www.londonaa.org.uk' },{ icon:'📍', name:'Change Grow Live London', detail:'cgl.org.uk · Free NHS-linked treatment', url:'https://www.changegrowlive.org' }],
+    birmingham: [{ icon:'📍', name:'Forward Trust Birmingham', detail:'forwardtrust.org.uk', url:'https://www.forwardtrust.org.uk' }],
+    manchester: [{ icon:'📍', name:'Lifeline Manchester', detail:'lifeline.org.uk', url:'https://www.lifeline.org.uk' }],
+    leeds: [{ icon:'📍', name:'Change Grow Live Leeds', detail:'cgl.org.uk', url:'https://www.changegrowlive.org' }],
+    liverpool: [{ icon:'📍', name:'CGL Liverpool', detail:'cgl.org.uk', url:'https://www.changegrowlive.org' }],
+    brighton: [{ icon:'📍', name:'Rise Recovery Brighton', detail:'riserecovery.org.uk', url:'https://www.riserecovery.org.uk' }],
+  },
+  'mental-health': {
+    national: [
+      { icon:'🔗', name:'Mind UK', detail:'mind.org.uk · Mental health support', url:'https://www.mind.org.uk' },
+      { icon:'🔗', name:'Samaritans', detail:'116 123 · Free 24/7 · samaritans.org', url:'https://www.samaritans.org' },
+      { icon:'🔗', name:'PTSD UK', detail:'ptsduk.org · Trauma & PTSD resources', url:'https://www.ptsduk.org' },
+      { icon:'🔗', name:'NHS Talking Therapies', detail:'nhs.uk · Free CBT referral', url:'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments' },
+      { icon:'🔗', name:'Rethink Mental Illness', detail:'rethink.org · Complex mental health', url:'https://www.rethink.org' },
+    ],
+    london: [{ icon:'📍', name:'South London & Maudsley NHS', detail:'slam.nhs.uk · Specialist mental health', url:'https://www.slam.nhs.uk' }],
+    birmingham: [{ icon:'📍', name:'Birmingham Mind', detail:'birminghammind.org', url:'https://www.birminghammind.org' }],
+    manchester: [{ icon:'📍', name:'Mind in Salford', detail:'mindinsalford.org.uk', url:'https://www.mindinsalford.org.uk' }],
+    leeds: [{ icon:'📍', name:'Leeds Mind', detail:'leedsmind.org.uk', url:'https://www.leedsmind.org.uk' }],
+    liverpool: [{ icon:'📍', name:'Mersey Care NHS', detail:'merseycare.nhs.uk', url:'https://www.merseycare.nhs.uk' }],
+    brighton: [{ icon:'📍', name:'Sussex Mental Health Line', detail:'0800 0309 500 · Free 24/7', url:'https://www.sussexmhaw.co.uk' }],
+  },
+  employment: {
+    national: [
+      { icon:'🔗', name:'Shaw Trust', detail:'shawtrust.org.uk · Employment in recovery', url:'https://www.shawtrust.org.uk' },
+      { icon:'🔗', name:'Turn2Us', detail:'turn2us.org.uk · Benefits & financial support', url:'https://www.turn2us.org.uk' },
+      { icon:'🔗', name:'Citizens Advice', detail:'citizensadvice.org.uk · Rights & employment', url:'https://www.citizensadvice.org.uk' },
+      { icon:'🔗', name:'Working Well Trust', detail:'workingwelltrust.org · Disability & mental health employment', url:'https://www.workingwelltrust.org' },
+    ],
+    london: [{ icon:'📍', name:'Working Well London', detail:'workingwelltrust.org', url:'https://www.workingwelltrust.org' }],
+    birmingham: [{ icon:'📍', name:'Jobcentre Plus Birmingham', detail:'gov.uk', url:'https://www.gov.uk/contact-jobcentre-plus' }],
+    manchester: [{ icon:'📍', name:'Greater Manchester Citizens Advice', detail:'citizensadvicemanchester.org.uk', url:'https://www.citizensadvicemanchester.org.uk' }],
+    leeds: [{ icon:'📍', name:'Leeds Citizens Advice', detail:'citizensadviceleeds.org.uk', url:'https://www.citizensadviceleeds.org.uk' }],
+    liverpool: [{ icon:'📍', name:'Liverpool Law Centre', detail:'liverpoollawcentre.org.uk', url:'https://www.liverpoollawcentre.org.uk' }],
+    brighton: [{ icon:'📍', name:'Brighton Jobcentre Plus', detail:'gov.uk', url:'https://www.gov.uk/contact-jobcentre-plus' }],
+  },
+  spirituality: {
+    national: [
+      { icon:'🔗', name:'Mindfulness Association UK', detail:'mindfulnessassociation.net · Courses & resources', url:'https://www.mindfulnessassociation.net' },
+      { icon:'🔗', name:'Breathworks', detail:'breathworks-mindfulness.org.uk', url:'https://www.breathworks-mindfulness.org.uk' },
+      { icon:'🔗', name:'SMART Recovery UK', detail:'smartrecovery.org.uk · Secular recovery', url:'https://www.smartrecovery.org.uk' },
+    ]
+  },
+};
+
+// JOB LISTINGS DATA
+const jobListings = [
+  // Recovery & Social sector
+  { id:1, title:'Peer Support Worker', employer:'Mind UK', sector:'Charity / Mental Health', type:'Part-time', salary:'£21,000 pro rata', location:'Remote / London', tags:['type:Recovery-related','sector:Charity','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.mind.org.uk/jobs', volunteer:false },
+  { id:2, title:'Addiction Recovery Coach', employer:'With You (Addaction)', sector:'Charity / Recovery', type:'Full-time', salary:'£24,000–£27,000', location:'Manchester / Hybrid', tags:['type:Recovery-related','sector:Charity','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.wearewithyou.org.uk/about-us/jobs', volunteer:false },
+  { id:3, title:'Community Support Volunteer', employer:'Turning Point', sector:'Charity', type:'Volunteer', salary:'Expenses covered', location:'UK-wide', tags:['type:Volunteer','sector:Charity','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.turning-point.co.uk/get-involved/volunteering', volunteer:true },
+  // Tech & IT
+  { id:4, title:'Junior Web Developer', employer:'TechCare Ltd', sector:'Technology', type:'Remote / Full-time', salary:'£26,000–£32,000', location:'Remote UK', tags:['type:IT','sector:Tech','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.linkedin.com/jobs', volunteer:false },
+  { id:5, title:'IT Support Analyst', employer:'Scope Digital', sector:'Technology', type:'Full-time', salary:'£23,000–£27,000', location:'Birmingham / Hybrid', tags:['type:IT','sector:Tech','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.indeed.co.uk', volunteer:false },
+  // Sales & Marketing
+  { id:6, title:'Digital Marketing Executive', employer:'GreenWave Agency', sector:'Marketing', type:'Full-time', salary:'£25,000–£30,000', location:'Remote UK', tags:['type:Sales & Marketing','sector:Marketing','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.linkedin.com/jobs', volunteer:false },
+  { id:7, title:'Sales Development Representative', employer:'SaaSify UK', sector:'Tech / SaaS', type:'Full-time', salary:'£24,000 + commission', location:'Leeds / Hybrid', tags:['type:Sales & Marketing','sector:Tech','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.indeed.co.uk', volunteer:false },
+  // Finance
+  { id:8, title:'Finance Administrator', employer:'ClearBooks', sector:'Finance', type:'Part-time', salary:'£20,000 pro rata', location:'Remote UK', tags:['type:Finance','sector:Finance','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.totaljobs.com', volunteer:false },
+  { id:9, title:'Junior Financial Analyst', employer:'Beacon Finance', sector:'Finance', type:'Full-time', salary:'£28,000–£32,000', location:'Liverpool / Hybrid', tags:['type:Finance','sector:Finance','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.linkedin.com/jobs', volunteer:false },
+  // Social Media
+  { id:10, title:'Content Moderator', employer:'SafeSpace Social', sector:'Social Media / Tech', type:'Remote / Full-time', salary:'£22,000–£25,000', location:'Remote UK', tags:['type:IT','sector:Social Media','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.indeed.co.uk', volunteer:false },
+  { id:11, title:'Community Manager', employer:'Wellbeing Socials', sector:'Social Media', type:'Full-time', salary:'£26,000–£30,000', location:'Brighton / Remote', tags:['type:Sales & Marketing','sector:Social Media','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.linkedin.com/jobs', volunteer:false },
+  // Web3
+  { id:12, title:'Web3 Community Manager', employer:'RecoHubz DAO', sector:'Web3 / Crypto', type:'DAO Role / Remote', salary:'Token-based + stipend', location:'Remote / Global', tags:['type:Web3','sector:Web3','pledge:Employer Pledge ✓'], new:true, applyUrl:'#', volunteer:false },
+  { id:13, title:'Smart Contract Auditor (Junior)', employer:'ChainSafe UK', sector:'Web3 / Blockchain', type:'Full-time Remote', salary:'£35,000–£45,000', location:'Remote UK', tags:['type:Web3','sector:Web3','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.linkedin.com/jobs', volunteer:false },
+  // Volunteering stepping stones
+  { id:14, title:'Helpline Volunteer', employer:'Samaritans', sector:'Charity', type:'Volunteer', salary:'Unpaid — training provided', location:'UK-wide', tags:['type:Volunteer','sector:Charity','pledge:Employer Pledge ✓'], new:false, applyUrl:'https://www.samaritans.org/support-us/volunteer', volunteer:true },
+  { id:15, title:'Digital Skills Volunteer Mentor', employer:'The Prince\'s Trust', sector:'Charity / Education', type:'Volunteer', salary:'Expenses covered', location:'Remote / UK-wide', tags:['type:Volunteer','sector:Charity','pledge:Employer Pledge ✓'], new:true, applyUrl:'https://www.princes-trust.org.uk/about-the-trust/get-involved/volunteer', volunteer:true },
+];
+
+const externalJobSites = [
+  { icon:'🔗', name:'Charity Job', detail:'charityjob.co.uk · Recovery & social sector roles', url:'https://www.charityjob.co.uk' },
+  { icon:'🔗', name:'LinkedIn Jobs UK', detail:'linkedin.com/jobs · All sectors · Recovery-friendly filters', url:'https://www.linkedin.com/jobs' },
+  { icon:'🔗', name:'Indeed UK', detail:'indeed.co.uk · Large job board · Remote & flexible roles', url:'https://www.indeed.co.uk' },
+  { icon:'🔗', name:'Total Jobs', detail:'totaljobs.com · UK-wide listings', url:'https://www.totaljobs.com' },
+  { icon:'🔗', name:'Do-it Volunteering', detail:'do-it.org · UK volunteering opportunities', url:'https://do-it.org' },
+  { icon:'🔗', name:'Reach Volunteering', detail:'reachvolunteering.org.uk · Skilled volunteering roles', url:'https://reachvolunteering.org.uk' },
+  { icon:'🔗', name:'Crypto Jobs List', detail:'cryptojobslist.com · Web3 & blockchain roles', url:'https://cryptojobslist.com' },
+  { icon:'🔗', name:'Web3 Jobs', detail:'web3.career · DAO, DeFi & blockchain careers', url:'https://web3.career' },
+];
+
+const pledgeCommitments = [
+  'Flexible working hours and remote options wherever possible',
+  'No stigma or discrimination for those in recovery',
+  'Lived experience valued as a professional asset',
+  'Mental health days and wellbeing support included',
+  'Anonymous application process available on request',
+];
+
+const jobFilters = ['All', 'Recovery-related', 'IT', 'Sales & Marketing', 'Finance', 'Web3', 'Volunteer', 'Social Media'];
+let activeFilter = 'All';
+
+function renderJobBoard() {
+  const panel = document.getElementById('jobboard-panel');
+  const filtered = activeFilter === 'All' ? jobListings :
+    jobListings.filter(j => j.tags.some(t => t.includes(activeFilter)));
+
+  const filterHtml = `
+    <div class="jb-top">
+      <div class="jb-filters">
+        ${jobFilters.map(f => `<div class="jb-filter${activeFilter===f?' active':''}" onclick="setFilter('${f}')">${f}</div>`).join('')}
+      </div>
+      <div class="jb-count">${filtered.length} listings</div>
+    </div>`;
+
+  const pledgeHtml = `
+    <div class="jb-pledge-box">
+      <div class="jb-pledge-title">🤝 RecoHubz Employer Pledge</div>
+      <div class="jb-pledge-items">
+        ${pledgeCommitments.map(c => `<div class="jb-pledge-item">${c}</div>`).join('')}
+      </div>
+    </div>`;
+
+  const listingsHtml = `
+    <div class="jb-section-label">📋 Current Listings</div>
+    <div class="jb-listings">
+      ${filtered.map(j => {
+        const tagHtml = j.tags.map(t => {
+          const [type, val] = t.split(':');
+          return `<span class="jb-tag ${type}">${val}</span>`;
+        }).join('');
+        return `
+          <div class="jb-card">
+            <div class="jb-card-top">
+              <div class="jb-card-left">
+                <div class="jb-title">${j.title}</div>
+                <div class="jb-employer">${j.employer} · ${j.sector}</div>
+              </div>
+              <div class="jb-card-actions">
+                ${j.new ? '<span class="jb-new">NEW</span>' : ''}
+                <a class="jb-apply ${j.volunteer?'volunteer-btn':''}" href="${j.applyUrl}" target="_blank" rel="noopener">
+                  ${j.volunteer ? 'Volunteer →' : 'Apply →'}
+                </a>
+              </div>
+            </div>
+            <div class="jb-tags">${tagHtml}</div>
+            <div class="jb-meta">
+              <span class="jb-salary">${j.salary}</span>
+              <span class="jb-location">📍 ${j.location}</span>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+
+  const externalHtml = `
+    <div class="jb-section-label">🔗 External Job Sites</div>
+    <div class="jb-external">
+      ${externalJobSites.map(s => `
+        <a class="jb-ext-link" href="${s.url}" target="_blank" rel="noopener">
+          <span class="jb-ext-icon">${s.icon}</span>
+          <span class="jb-ext-body"><span class="jb-ext-name">${s.name}</span><span class="jb-ext-detail">${s.detail}</span></span>
+          <span style="color:rgba(255,255,255,0.18);font-size:0.75rem;">↗</span>
+        </a>`).join('')}
+    </div>`;
+
+  panel.innerHTML = filterHtml + pledgeHtml + listingsHtml + externalHtml;
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderJobBoard();
+}
+
+let currentChannel = 'general';
+let currentTab = 'chat';
+let userCity = '';
+
+// Try get city from triage session
+try { const a = JSON.parse(sessionStorage.getItem('rh_answers') || '{}'); userCity = a.city || ''; } catch(e) {}
+
+function renderMessages(key) {
+  const ch = channels[key];
+  const area = document.getElementById('messages-area');
+  area.innerHTML = '';
+  ch.messages.forEach(msg => {
+    if (msg.day) { const d = document.createElement('div'); d.className = 'day-divider'; d.textContent = msg.day; area.appendChild(d); return; }
+    if (msg.system) { const d = document.createElement('div'); d.className = 'system-msg'; d.textContent = msg.text; area.appendChild(d); return; }
+    const el = document.createElement('div'); el.className = 'message';
+    let rx = '';
+    if (msg.reactions && msg.reactions.length) {
+      rx = '<div class="reaction-bar">' + msg.reactions.map(([e,c,a]) => `<span class="reaction${a?' active':''}" onclick="toggleReaction(this)">${e} ${c}</span>`).join('') + '</div>';
+    }
+    el.innerHTML = `<div class="msg-avatar" style="background:linear-gradient(135deg,${msg.color},${msg.color}bb)">${msg.avatar}</div>
+    <div class="msg-body"><div class="msg-header"><span class="msg-name">${msg.name}</span><span class="msg-time">${msg.time}</span></div>
+    <div class="msg-text">${msg.text.replace(/\n/g,'<br/>')}</div>${rx}</div>`;
+    area.appendChild(el);
+  });
+  area.scrollTop = area.scrollHeight;
+}
+
+function renderResources(key) {
+  const ch = channels[key];
+  const res = ch.resources;
+  const data = resourceData[res.area] || resourceData['recovery'];
+  const national = data.national || [];
+  const cityLinks = (userCity && userCity !== 'other' && data[userCity]) ? data[userCity] : [];
+  const panel = document.getElementById('resources-panel');
+
+  let cityHtml = '';
+  if (cityLinks.length) {
+    cityHtml = `<div class="res-city-label">📍 ${userCity.charAt(0).toUpperCase()+userCity.slice(1)} — Local Services</div>` +
+      cityLinks.map(r => `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener"><span class="r-icon">${r.icon}</span><span class="r-body"><span class="r-name">${r.name}</span><span class="r-detail">${r.detail}</span></span><span class="r-arrow">↗</span></a>`).join('');
+  }
+  const natHtml = (cityLinks.length ? `<div class="res-city-label">🇬🇧 National Services</div>` : '') +
+    national.map(r => `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener"><span class="r-icon">${r.icon}</span><span class="r-body"><span class="r-name">${r.name}</span><span class="r-detail">${r.detail}</span></span><span class="r-arrow">↗</span></a>`).join('');
+
+  const betaHtml = res.subBItems && res.subBItems.length ? `
+    <div class="res-section">
+      <div class="res-section-header"><div class="res-section-icon b">🌱</div><div class="res-section-title">RecoHubz Services</div><span class="res-tag beta">Sub-section B · Beta</span></div>
+      <div class="beta-box">
+        <div class="beta-badge-sm">In Beta — Coming Soon</div>
+        <h4>We're building this for you</h4>
+        <p>Our addiction team is developing these services for beta members. You'll be first to access them.</p>
+        <div class="beta-items">${res.subBItems.map(i=>`<div class="beta-item"><div class="bi-dot"></div>${i}</div>`).join('')}</div>
+      </div>
+    </div>` : '';
+
+  panel.innerHTML = `
+    <div class="res-section">
+      <div class="res-section-header"><div class="res-section-icon a">📚</div><div class="res-section-title">Free External Resources</div><span class="res-tag free">Sub-section A · Free</span></div>
+      <div class="res-desc">${res.subADesc}</div>
+      <div class="resource-links">${cityHtml}${natHtml}</div>
+    </div>
+    ${betaHtml}`;
+}
+
+function switchChannel(el, key) {
+  document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const badge = el.querySelector('.ch-badge'); if (badge) badge.remove();
+  currentChannel = key;
+  const ch = channels[key];
+  document.getElementById('ch-title').textContent = ch.title;
+  document.getElementById('ch-desc').textContent = ch.desc;
+  document.getElementById('active-ch-name').textContent = ch.title.split('—')[0].trim();
+  document.getElementById('msg-input').placeholder = ch.placeholder;
+  // Show job board tab only for job-board channel
+  const jbBtn = document.getElementById('tab-jobboard-btn');
+  jbBtn.style.display = key === 'job-board' ? 'block' : 'none';
+  // Reset to chat tab when switching channels
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('.tab').classList.add('active');
+  document.getElementById('tab-chat').classList.add('active');
+  currentTab = 'chat';
+  renderMessages(key);
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'resources') renderResources(currentChannel);
+  if (tab === 'jobboard') renderJobBoard();
+}
+
+function toggleReaction(el) {
+  el.classList.toggle('active');
+  const parts = el.textContent.trim().split(' ');
+  const emoji = parts[0]; let count = parseInt(parts[1]);
+  el.classList.contains('active') ? count++ : count--;
+  el.textContent = emoji + ' ' + count;
+}
+
+function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim(); if (!text) return;
+  const area = document.getElementById('messages-area');
+  const el = document.createElement('div'); el.className = 'message'; el.style.animation = 'fadeUp 0.3s ease';
+  el.innerHTML = `<div class="msg-avatar" style="background:linear-gradient(135deg,#1D9E75,#0F6E56)">A7</div>
+    <div class="msg-body"><div class="msg-header"><span class="msg-name">Anon#4821</span><span class="msg-time">Just now</span></div>
+    <div class="msg-text">${text}</div></div>`;
+  area.appendChild(el); area.scrollTop = area.scrollHeight; input.value = '';
+}
+
+function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
+
+renderMessages('general');
+</script>
+</body>
+</html>

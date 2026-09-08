@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RecoHubz – Your Pathway</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #0F6E56; --teal-lt: #1D9E75; --teal-bg: #E1F5EE;
+    --dark: #0D1A14; --mid: #1A2D24; --mid2: #162720;
+    --white: #FFFFFF; --border: rgba(29,158,117,0.15);
+    --gold: #C89B3C;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 5vw; border-bottom: 1px solid var(--border);
+    background: var(--mid2); position: sticky; top: 0; z-index: 10;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; text-decoration: none; color: var(--white); }
+  .logo span { color: var(--teal-lt); }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-link { font-size: 0.82rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--white); }
+
+  .hero {
+    text-align: center; padding: 4rem 5vw 2rem;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(29,158,117,0.12) 0%, transparent 70%);
+  }
+  .hero-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal-lt); background: rgba(29,158,117,0.1); padding: 0.3rem 0.9rem;
+    border-radius: 50px; margin-bottom: 1.2rem; border: 1px solid rgba(29,158,117,0.22);
+    animation: fadeUp 0.5s ease;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800; line-height: 1.1; margin-bottom: 0.8rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-lt); }
+  .hero-sub {
+    font-size: 0.95rem; color: rgba(255,255,255,0.45); line-height: 1.7;
+    max-width: 520px; margin: 0 auto 1.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+  .pathway-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.25);
+    border-radius: 50px; padding: 0.4rem 1rem; font-size: 0.82rem;
+    color: var(--teal-lt); margin-bottom: 3rem; animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .content { max-width: 860px; margin: 0 auto; padding: 0 5vw 5rem; }
+
+  /* PRIMARY CHANNEL CARD */
+  .primary-channel {
+    background: linear-gradient(135deg, rgba(29,158,117,0.15), rgba(15,110,86,0.08));
+    border: 1px solid rgba(29,158,117,0.3); border-radius: 20px;
+    padding: 2rem; margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .channel-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-lt); margin-bottom: 0.6rem; }
+  .channel-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .channel-desc { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.65; margin-bottom: 1.5rem; }
+  .btn-enter-channel {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--teal-lt); color: var(--white); padding: 0.8rem 1.6rem;
+    border-radius: 50px; font-size: 0.9rem; font-weight: 500; text-decoration: none;
+    transition: background 0.2s, transform 0.15s; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-enter-channel:hover { background: var(--teal); transform: translateY(-1px); }
+
+  /* SECTIONS */
+  .sections-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; animation: fadeUp 0.6s 0.5s ease both; }
+  @media (max-width: 640px) { .sections-grid { grid-template-columns: 1fr; } }
+
+  .section-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 1.5rem; }
+  .section-card.subsection-a { border-color: rgba(29,158,117,0.2); }
+  .section-card.subsection-b { border-color: rgba(200,155,60,0.2); }
+  .section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+  .section-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .section-icon.a { background: rgba(29,158,117,0.12); }
+  .section-icon.b { background: rgba(200,155,60,0.12); }
+  .section-title-sm { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+  .section-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 50px; margin-left: auto; }
+  .section-tag.free { background: rgba(29,158,117,0.12); color: var(--teal-lt); border: 1px solid rgba(29,158,117,0.2); }
+  .section-tag.beta { background: rgba(200,155,60,0.12); color: var(--gold); border: 1px solid rgba(200,155,60,0.2); }
+
+  /* RESOURCE LINKS */
+  .resource-links { display: flex; flex-direction: column; gap: 0.5rem; }
+  .resource-link {
+    display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 0.8rem;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; text-decoration: none; color: var(--white);
+    font-size: 0.82rem; transition: all 0.18s;
+  }
+  .resource-link:hover { background: rgba(29,158,117,0.08); border-color: rgba(29,158,117,0.25); }
+  .resource-link .r-icon { font-size: 1rem; flex-shrink: 0; }
+  .resource-link .r-body { flex: 1; min-width: 0; }
+  .resource-link .r-name { font-weight: 500; display: block; }
+  .resource-link .r-detail { font-size: 0.72rem; color: rgba(255,255,255,0.3); display: block; margin-top: 0.1rem; }
+  .resource-link .r-arrow { color: rgba(255,255,255,0.2); font-size: 0.8rem; }
+  .city-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin: 0.8rem 0 0.4rem; }
+
+  /* BETA CARD */
+  .beta-content { text-align: center; padding: 1rem 0; }
+  .beta-badge { display: inline-block; background: rgba(200,155,60,0.1); border: 1px solid rgba(200,155,60,0.25); color: var(--gold); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.8rem; border-radius: 50px; margin-bottom: 0.8rem; }
+  .beta-content h4 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .beta-content p { font-size: 0.78rem; color: rgba(255,255,255,0.35); line-height: 1.65; margin-bottom: 1rem; }
+  .beta-items { display: flex; flex-direction: column; gap: 0.4rem; }
+  .beta-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.8rem; background: rgba(255,255,255,0.02); border-radius: 8px; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+  .beta-item .bi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.5; flex-shrink: 0; }
+
+  /* OTHER CHANNELS */
+  .other-channels { animation: fadeUp 0.6s 0.6s ease both; }
+  .other-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: rgba(255,255,255,0.6); }
+  .channels-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .ch-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 50px; padding: 0.45rem 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.5);
+    text-decoration: none; transition: all 0.18s; cursor: pointer;
+  }
+  .ch-pill:hover { background: rgba(29,158,117,0.08); border-color: rgba(29,158,117,0.25); color: var(--white); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes popIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="recohubz-landing.html" class="logo">Reco<span>Hubz</span></a>
+  <div class="nav-right">
+    <a href="recohubz-community.html" class="nav-link">Community →</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Your personalised pathway</div>
+  <h1>Welcome to<br/><em>RecoHubz</em> 💚</h1>
+  <p class="hero-sub">Based on your answers, here is the pathway we recommend. Everything below is free, anonymous and at your own pace.</p>
+  <div class="pathway-badge" id="pathway-badge">🌱 Pathway ready</div>
+</div>
+
+<div class="content">
+
+  <!-- PRIMARY CHANNEL -->
+  <div class="primary-channel" id="primary-channel">
+    <div class="channel-label">Your primary channel</div>
+    <div class="channel-name" id="channel-name"># recovery-support</div>
+    <div class="channel-desc" id="channel-desc">Loading your pathway...</div>
+    <a href="recohubz-community.html" class="btn-enter-channel" id="channel-link">Enter Community Channel →</a>
+  </div>
+
+  <!-- SUB-SECTIONS -->
+  <div class="sections-grid">
+    <!-- SUB A: Free Resources -->
+    <div class="section-card subsection-a">
+      <div class="section-header">
+        <div class="section-icon a">📚</div>
+        <div class="section-title-sm">Free Resources</div>
+        <span class="section-tag free">Sub-section A</span>
+      </div>
+      <div id="resources-container">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- SUB B: RecoHubz Services -->
+    <div class="section-card subsection-b">
+      <div class="section-header">
+        <div class="section-icon b">🌱</div>
+        <div class="section-title-sm">RecoHubz Services</div>
+        <span class="section-tag beta">Sub-section B</span>
+      </div>
+      <div class="beta-content">
+        <div class="beta-badge">In Beta — Coming Soon</div>
+        <h4>We're building this for you</h4>
+        <p>RecoHubz services are in active development with our addiction team. Beta members will be first to access these.</p>
+        <div class="beta-items">
+          <div class="beta-item"><div class="bi-dot"></div>AI-guided one-to-one support sessions</div>
+          <div class="beta-item"><div class="bi-dot"></div>Avatar-based group therapy rooms</div>
+          <div class="beta-item"><div class="bi-dot"></div>Matched IRL therapist referrals</div>
+          <div class="beta-item"><div class="bi-dot"></div>On-chain recovery milestone tracking</div>
+          <div class="beta-item"><div class="bi-dot"></div>DAO governance participation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER CHANNELS -->
+  <div class="other-channels">
+    <div class="other-title">Also explore these channels</div>
+    <div class="channels-row" id="other-channels">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const cityLinks = {
+  alcohol: {
+    national: [
+      { icon: '🔗', name: 'Alcoholics Anonymous UK', detail: 'aa.org.uk · Meetings nationwide', url: 'https://www.aa.org.uk' },
+      { icon: '🔗', name: 'Narcotics Anonymous UK', detail: 'ukna.org · Online & in-person meetings', url: 'https://www.ukna.org' },
+      { icon: '🔗', name: 'Cocaine Anonymous UK', detail: 'cauk.org.uk · Fellowship & support', url: 'https://www.cauk.org.uk' },
+      { icon: '🔗', name: 'Drinkaware', detail: 'drinkaware.co.uk · Self-assessment tools', url: 'https://www.drinkaware.co.uk' },
+      { icon: '🔗', name: 'Talk to Frank', detail: 'talktofrank.com · Drug info & advice', url: 'https://www.talktofrank.com' },
+    ],
+    london: [
+      { icon: '📍', name: 'AA London Region', detail: 'londonaa.org.uk · City-wide meetings', url: 'https://www.londonaa.org.uk' },
+      { icon: '📍', name: 'Change Grow Live London', detail: 'cgl.org.uk · Free NHS-linked treatment', url: 'https://www.changegrowlive.org' },
+    ],
+    birmingham: [
+      { icon: '📍', name: 'Forward Trust Birmingham', detail: 'forwardtrust.org.uk · Recovery support', url: 'https://www.forwardtrust.org.uk' },
+      { icon: '📍', name: 'AA Birmingham', detail: 'alcoholics-anonymous.org.uk · Local meetings', url: 'https://www.alcoholics-anonymous.org.uk' },
+    ],
+    manchester: [
+      { icon: '📍', name: 'Lifeline Manchester', detail: 'lifeline.org.uk · Substance use support', url: 'https://www.lifeline.org.uk' },
+      { icon: '📍', name: 'AA Manchester', detail: 'alcoholics-anonymous.org.uk · Local meetings', url: 'https://www.alcoholics-anonymous.org.uk' },
+    ],
+    leeds: [
+      { icon: '📍', name: 'Change Grow Live Leeds', detail: 'cgl.org.uk · Substance misuse service', url: 'https://www.changegrowlive.org' },
+      { icon: '📍', name: 'AA Leeds', detail: 'alcoholics-anonymous.org.uk · Local meetings', url: 'https://www.alcoholics-anonymous.org.uk' },
+    ],
+    liverpool: [
+      { icon: '📍', name: 'CGL Liverpool', detail: 'cgl.org.uk · NHS-linked recovery service', url: 'https://www.changegrowlive.org' },
+      { icon: '📍', name: 'AA Liverpool', detail: 'alcoholics-anonymous.org.uk · Local meetings', url: 'https://www.alcoholics-anonymous.org.uk' },
+    ],
+    brighton: [
+      { icon: '📍', name: 'Rise Recovery Brighton', detail: 'riserecovery.org.uk · Local service', url: 'https://www.riserecovery.org.uk' },
+      { icon: '📍', name: 'AA Brighton', detail: 'alcoholics-anonymous.org.uk · Local meetings', url: 'https://www.alcoholics-anonymous.org.uk' },
+    ],
+  },
+  behavioural: {
+    national: [
+      { icon: '🔗', name: 'GamCare', detail: 'gamcare.org.uk · Gambling support helpline', url: 'https://www.gamcare.org.uk' },
+      { icon: '🔗', name: 'Gamblers Anonymous UK', detail: 'gamblersanonymous.org.uk · Fellowship', url: 'https://www.gamblersanonymous.org.uk' },
+      { icon: '🔗', name: 'SMART Recovery UK', detail: 'smartrecovery.org.uk · Behavioural addiction', url: 'https://www.smartrecovery.org.uk' },
+      { icon: '🔗', name: 'The Mix', detail: 'themix.org.uk · Under 25s · Social media & gaming', url: 'https://www.themix.org.uk' },
+      { icon: '🔗', name: 'NHS Gambling Harm', detail: 'nhs.uk · Free NHS treatment pathways', url: 'https://www.nhs.uk/live-well/addiction-support/gambling-addiction' },
+    ],
+    london: [
+      { icon: '📍', name: 'GamCare London Clinic', detail: 'gamcare.org.uk · Face-to-face counselling', url: 'https://www.gamcare.org.uk' },
+      { icon: '📍', name: 'NHS NGSHS London', detail: 'nhs.uk · National Gambling Harm Service', url: 'https://www.nhs.uk' },
+    ],
+    birmingham: [
+      { icon: '📍', name: 'GamCare West Midlands', detail: 'gamcare.org.uk · Regional support', url: 'https://www.gamcare.org.uk' },
+    ],
+    manchester: [
+      { icon: '📍', name: 'GamCare North West', detail: 'gamcare.org.uk · Regional support', url: 'https://www.gamcare.org.uk' },
+      { icon: '📍', name: 'NGSHS Manchester', detail: 'nhs.uk · NHS Gambling Service', url: 'https://www.nhs.uk' },
+    ],
+    leeds: [
+      { icon: '📍', name: 'GamCare Yorkshire', detail: 'gamcare.org.uk · Yorkshire & Humber', url: 'https://www.gamcare.org.uk' },
+    ],
+    liverpool: [
+      { icon: '📍', name: 'GamCare North West', detail: 'gamcare.org.uk · Regional support', url: 'https://www.gamcare.org.uk' },
+    ],
+    brighton: [
+      { icon: '📍', name: 'GamCare South East', detail: 'gamcare.org.uk · South East region', url: 'https://www.gamcare.org.uk' },
+    ],
+  },
+  'mental-health': {
+    national: [
+      { icon: '🔗', name: 'Mind UK', detail: 'mind.org.uk · Mental health support', url: 'https://www.mind.org.uk' },
+      { icon: '🔗', name: 'Samaritans', detail: '116 123 · Free 24/7 · samaritans.org', url: 'https://www.samaritans.org' },
+      { icon: '🔗', name: 'Rethink Mental Illness', detail: 'rethink.org · Complex mental health', url: 'https://www.rethink.org' },
+      { icon: '🔗', name: 'PTSD UK', detail: 'ptsduk.org · Trauma & PTSD resources', url: 'https://www.ptsduk.org' },
+      { icon: '🔗', name: 'NHS Talking Therapies', detail: 'nhs.uk · Free CBT & counselling referral', url: 'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments' },
+    ],
+    london: [
+      { icon: '📍', name: 'Mind Infoline London', detail: 'mind.org.uk · London network', url: 'https://www.mind.org.uk' },
+      { icon: '📍', name: 'South London & Maudsley', detail: 'slam.nhs.uk · Specialist NHS mental health', url: 'https://www.slam.nhs.uk' },
+    ],
+    birmingham: [
+      { icon: '📍', name: 'Birmingham Mind', detail: 'birminghammind.org · Local mental health', url: 'https://www.birminghammind.org' },
+    ],
+    manchester: [
+      { icon: '📍', name: 'Mind in Salford', detail: 'mindinsalford.org.uk · Greater Manchester', url: 'https://www.mindinsalford.org.uk' },
+    ],
+    leeds: [
+      { icon: '📍', name: 'Leeds Mind', detail: 'leedsmind.org.uk · Local mental health', url: 'https://www.leedsmind.org.uk' },
+    ],
+    liverpool: [
+      { icon: '📍', name: 'Mersey Care NHS', detail: 'merseycare.nhs.uk · Mental health trust', url: 'https://www.merseycare.nhs.uk' },
+    ],
+    brighton: [
+      { icon: '📍', name: 'Sussex Mental Health Line', detail: '0800 0309 500 · 24/7 free', url: 'https://www.sussexmhaw.co.uk' },
+    ],
+  },
+  employment: {
+    national: [
+      { icon: '🔗', name: 'Shaw Trust', detail: 'shawtrust.org.uk · Employment for people in recovery', url: 'https://www.shawtrust.org.uk' },
+      { icon: '🔗', name: 'Working Well Trust', detail: 'workingwelltrust.org · Disability & mental health employment', url: 'https://www.workingwelltrust.org' },
+      { icon: '🔗', name: 'Turn2Us', detail: 'turn2us.org.uk · Benefits & financial support', url: 'https://www.turn2us.org.uk' },
+      { icon: '🔗', name: 'Citizens Advice', detail: 'citizensadvice.org.uk · Rights & employment advice', url: 'https://www.citizensadvice.org.uk' },
+    ],
+    london: [
+      { icon: '📍', name: 'Jobcentre Plus London', detail: 'gov.uk · Universal Credit & job search', url: 'https://www.gov.uk/contact-jobcentre-plus' },
+      { icon: '📍', name: 'Working Well (London)', detail: 'workingwelltrust.org · London offices', url: 'https://www.workingwelltrust.org' },
+    ],
+    birmingham: [{ icon: '📍', name: 'Jobcentre Plus Birmingham', detail: 'gov.uk · Employment support', url: 'https://www.gov.uk/contact-jobcentre-plus' }],
+    manchester: [{ icon: '📍', name: 'Greater Manchester CA', detail: 'citizensadvicemanchester.org.uk', url: 'https://www.citizensadvicemanchester.org.uk' }],
+    leeds: [{ icon: '📍', name: 'Leeds Citizens Advice', detail: 'citizensadviceleeds.org.uk', url: 'https://www.citizensadviceleeds.org.uk' }],
+    liverpool: [{ icon: '📍', name: 'Liverpool Citizens Advice', detail: 'liverpoollawcentre.org.uk', url: 'https://www.liverpoollawcentre.org.uk' }],
+    brighton: [{ icon: '📍', name: 'Brighton JobCentre', detail: 'gov.uk · Employment support', url: 'https://www.gov.uk/contact-jobcentre-plus' }],
+  },
+  general: {
+    national: [
+      { icon: '🔗', name: 'Adfam', detail: 'adfam.org.uk · For families affected by addiction', url: 'https://www.adfam.org.uk' },
+      { icon: '🔗', name: 'Al-Anon UK', detail: 'al-anonuk.org.uk · Families of alcoholics', url: 'https://www.al-anonuk.org.uk' },
+      { icon: '🔗', name: 'Nacoa', detail: 'nacoa.org.uk · Children of addicted parents', url: 'https://www.nacoa.org.uk' },
+      { icon: '🔗', name: 'Mind UK', detail: 'mind.org.uk · Mental health for all', url: 'https://www.mind.org.uk' },
+      { icon: '🔗', name: 'ACAS', detail: 'acas.org.uk · Employer support & workplace advice', url: 'https://www.acas.org.uk' },
+    ],
+    london: [], birmingham: [], manchester: [], leeds: [], liverpool: [], brighton: [],
+  },
+  recovery: {
+    national: [
+      { icon: '🔗', name: 'SMART Recovery UK', detail: 'smartrecovery.org.uk · Evidence-based recovery', url: 'https://www.smartrecovery.org.uk' },
+      { icon: '🔗', name: 'Turning Point', detail: 'turning-point.co.uk · Recovery services UK', url: 'https://www.turning-point.co.uk' },
+      { icon: '🔗', name: 'With You (Addaction)', detail: 'wearewithyou.org.uk · Drug & alcohol support', url: 'https://www.wearewithyou.org.uk' },
+      { icon: '🔗', name: 'Alcoholics Anonymous UK', detail: 'aa.org.uk · 12-step recovery', url: 'https://www.aa.org.uk' },
+    ],
+    london: [], birmingham: [], manchester: [], leeds: [], liverpool: [], brighton: [],
+  },
+  spirituality: {
+    national: [
+      { icon: '🔗', name: 'Mindfulness Association', detail: 'mindfulnessassociation.net · Courses & resources', url: 'https://www.mindfulnessassociation.net' },
+      { icon: '🔗', name: 'Breathworks', detail: 'breathworks-mindfulness.org.uk · Mindfulness for wellbeing', url: 'https://www.breathworks-mindfulness.org.uk' },
+      { icon: '🔗', name: 'AA Spiritual Resources', detail: 'aa.org.uk · Spiritual dimension of recovery', url: 'https://www.aa.org.uk' },
+    ],
+    london: [], birmingham: [], manchester: [], leeds: [], liverpool: [], brighton: [],
+  },
+};
+
+const channelMap = {
+  alcohol:       { name: '# alcohol-substances', desc: 'A judgment-free space for those navigating alcohol and substance use recovery. Connect with peers who understand.', anchor: 'alcohol' },
+  behavioural:   { name: '# behavioural-addictions', desc: 'Support for gambling, trading addiction (including crypto & prediction markets) and social media compulsion.', anchor: 'gambling' },
+  'mental-health': { name: '# mental-health-trauma', desc: 'Complex trauma, PTSD, anxiety and depression — and the mental health dimensions of recovery.', anchor: 'mental-health' },
+  employment:    { name: '# employment-new-starts', desc: 'CV support, job listings, interview prep and rebuilding your professional life anonymously.', anchor: 'employment' },
+  general:       { name: '# general', desc: 'A warm welcome space for friends, families, employers and anyone exploring. Everyone is welcome here.', anchor: 'general' },
+  recovery:      { name: '# recovery-support', desc: 'Share your journey, celebrate milestones and support others. All recovery pathways welcome.', anchor: 'recovery-support' },
+  spirituality:  { name: '# spirituality-mindfulness', desc: 'Meditation, meaning-making and the inner journey of recovery.', anchor: 'spirituality' },
+  community:     { name: '# general', desc: 'A warm community space for all members. Come and connect.', anchor: 'general' },
+};
+
+const allChannels = [
+  { label: '# general', anchor: 'general' },
+  { label: '# recovery-support', anchor: 'recovery-support' },
+  { label: '# behavioural-addictions', anchor: 'gambling' },
+  { label: '# alcohol-substances', anchor: 'alcohol' },
+  { label: '# mental-health-trauma', anchor: 'mental-health' },
+  { label: '# spirituality-mindfulness', anchor: 'spirituality' },
+  { label: '# employment-new-starts', anchor: 'employment' },
+  { label: '📚 aa-ca-resources', anchor: 'aa-resources' },
+  { label: '💼 job-board', anchor: 'job-board' },
+];
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResourceLinks(area, city) {
+  const data = cityLinks[area] || cityLinks['recovery'];
+  const national = data.national || [];
+  const cityData = (city && city !== 'other' && data[city]) ? data[city] : [];
+  const container = document.getElementById('resources-container');
+
+  let html = '<div class="resource-links">';
+  if (cityData.length) {
+    html += `<div class="city-label">📍 ${city.charAt(0).toUpperCase() + city.slice(1)} — Local Services</div>`;
+    cityData.forEach(r => {
+      html += `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener">
+        <span class="r-icon">${r.icon}</span>
+        <span class="r-body"><span class="r-name">${r.name}</span><span class="r-detail">${r.detail}</span></span>
+        <span class="r-arrow">↗</span></a>`;
+    });
+    html += `<div class="city-label">🇬🇧 National Services</div>`;
+  }
+  national.forEach(r => {
+    html += `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener">
+      <span class="r-icon">${r.icon}</span>
+      <span class="r-body"><span class="r-name">${r.name}</span><span class="r-detail">${r.detail}</span></span>
+      <span class="r-arrow">↗</span></a>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderOtherChannels(primaryAnchor) {
+  const others = allChannels.filter(c => c.anchor !== primaryAnchor).slice(0, 6);
+  document.getElementById('other-channels').innerHTML = others.map(c =>
+    `<a class="ch-pill" href="recohubz-community.html">${c.label}</a>`
+  ).join('');
+}
+
+function init() {
+  let answers = { who: 'self', area: 'recovery', city: '', support: 'all' };
+  try {
+    const stored = sessionStorage.getItem('rh_answers');
+    if (stored) answers = { ...answers, ...JSON.parse(stored) };
+  } catch(e) {}
+
+  const area = answers.area || 'recovery';
+  const city = answers.city || '';
+  const who = answers.who || 'self';
+
+  // Channel
+  const ch = channelMap[area] || channelMap['recovery'];
+  document.getElementById('channel-name').textContent = ch.name;
+  document.getElementById('channel-desc').textContent = ch.desc;
+  document.getElementById('channel-link').href = 'recohubz-community.html';
+
+  // Pathway badge
+  const badges = {
+    self: '🌱 Personal Recovery Pathway',
+    family: '💚 Family Support Pathway',
+    employer: '🏢 Employer Guidance Pathway',
+    explore: '👋 Exploration Pathway',
+  };
+  document.getElementById('pathway-badge').textContent = badges[who] || '🌱 Pathway ready';
+
+  // Resources
+  renderResourceLinks(area, city);
+
+  // Other channels
+  renderOtherChannels(ch.anchor);
+}
+
+init();
+</script>
+</body>
+</html>

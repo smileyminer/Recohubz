@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RecoHubz – Recovery for the Digital Age</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:    #0F6E56;
+    --teal-lt: #1D9E75;
+    --teal-bg: #E1F5EE;
+    --dark:    #0D1A14;
+    --mid:     #1A2D24;
+    --muted:   #6B8C7D;
+    --off:     #F4FAF7;
+    --white:   #FFFFFF;
+    --gold:    #C89B3C;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: rgba(13,26,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(29,158,117,0.15);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.4rem;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--teal-lt); }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.9rem; font-weight: 400; transition: color 0.2s; }
+  nav ul a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--teal-lt); color: var(--white) !important;
+    padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 500 !important;
+  }
+  .nav-cta:hover { background: var(--teal) !important; color: var(--white) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 5vw 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(29,158,117,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 70%, rgba(15,110,86,0.12) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(29,158,117,0.06) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(29,158,117,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+  .hero-tag {
+    position: relative; z-index: 1;
+    display: inline-block;
+    background: rgba(29,158,117,0.15);
+    border: 1px solid rgba(29,158,117,0.4);
+    color: var(--teal-lt);
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.4rem 1.1rem; border-radius: 50px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero h1 {
+    position: relative; z-index: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-lt); }
+  .hero-sub {
+    position: relative; z-index: 1;
+    font-size: 1.15rem; font-weight: 300; line-height: 1.7;
+    color: rgba(255,255,255,0.65);
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+  .hero-btns {
+    position: relative; z-index: 1;
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--teal-lt); color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--teal); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: rgba(255,255,255,0.8);
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 400;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer; transition: border-color 0.2s, color 0.2s, transform 0.15s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: var(--white); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    color: rgba(255,255,255,0.3); font-size: 0.75rem; letter-spacing: 0.08em;
+    animation: bounce 2s infinite;
+  }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(29,158,117,0.6), transparent); }
+
+  /* PILLARS */
+  .pillars {
+    background: var(--off);
+    padding: 6rem 5vw;
+    color: var(--dark);
+  }
+  .section-label {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1rem; font-weight: 300; line-height: 1.7;
+    color: rgba(13,26,20,0.55); max-width: 520px; margin-bottom: 3.5rem;
+  }
+  .pillars-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;
+  }
+  .pillar-card {
+    background: var(--white); border-radius: 20px; padding: 2rem;
+    border: 1px solid rgba(15,110,86,0.1);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(15,110,86,0.12); }
+  .pillar-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--teal-bg); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.2rem;
+  }
+  .pillar-icon svg { width: 24px; height: 24px; stroke: var(--teal); fill: none; stroke-width: 1.8; }
+  .pillar-card h3 {
+    font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700;
+    margin-bottom: 0.5rem; color: var(--dark);
+  }
+  .pillar-card p { font-size: 0.88rem; line-height: 1.65; color: rgba(13,26,20,0.55); }
+
+  /* HOW IT WORKS */
+  .how {
+    background: var(--dark); padding: 6rem 5vw;
+    position: relative; overflow: hidden;
+  }
+  .how::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse 60% 60% at 90% 50%, rgba(29,158,117,0.08) 0%, transparent 70%);
+  }
+  .how-inner { position: relative; z-index: 1; }
+  .steps { display: flex; flex-direction: column; gap: 0; margin-top: 3rem; max-width: 680px; }
+  .step { display: flex; gap: 2rem; padding-bottom: 3rem; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; left: 19px; top: 48px; bottom: 0;
+    width: 1px; background: rgba(29,158,117,0.25);
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(29,158,117,0.15); border: 1px solid rgba(29,158,117,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--teal-lt);
+  }
+  .step-body h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem;
+    margin-bottom: 0.4rem; color: var(--white);
+  }
+  .step-body p { font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.5); }
+
+  /* FEATURES DARK CARDS */
+  .features {
+    background: var(--mid); padding: 6rem 5vw;
+  }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .feat-card {
+    background: rgba(255,255,255,0.04); border-radius: 20px; padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .feat-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(29,158,117,0.25); }
+  .feat-tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--teal-lt);
+    background: rgba(29,158,117,0.12); padding: 0.25rem 0.75rem; border-radius: 50px;
+    margin-bottom: 1.1rem;
+  }
+  .feat-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .feat-card p { font-size: 0.88rem; line-height: 1.7; color: rgba(255,255,255,0.5); }
+
+  /* CTA BAND */
+  .cta-band {
+    background: var(--teal); padding: 5rem 5vw; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-band::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 70%);
+  }
+  .cta-band h2 {
+    position: relative; z-index: 1;
+    font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .cta-band p {
+    position: relative; z-index: 1;
+    font-size: 1rem; font-weight: 300; line-height: 1.7;
+    color: rgba(255,255,255,0.75); max-width: 500px; margin: 0 auto 2.5rem;
+  }
+  .cta-band .btn-white {
+    position: relative; z-index: 1;
+    display: inline-block; background: var(--white); color: var(--teal);
+    padding: 0.9rem 2.2rem; border-radius: 50px; font-weight: 500; font-size: 0.95rem;
+    text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-band .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); padding: 3rem 5vw;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; }
+  .footer-logo span { color: var(--teal-lt); }
+  footer p { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.8rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(8px); }
+  }
+
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .hero h1 { font-size: 2.4rem; }
+    .steps { padding: 0 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Reco<span>Hubz</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#join" class="nav-cta">Join Beta</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-tag">Recovery for the Digital Age</div>
+  <h1>Anonymous. Private.<br/><em>Community-driven</em> Recovery.</h1>
+  <p class="hero-sub">
+    RecoHubz is a decentralised recovery protocol where high-functioning individuals find triage, therapy, community and a new start — without stigma, waiting lists or identity risk.
+  </p>
+  <div class="hero-btns">
+    <a href="#join" class="btn-primary">Join the Beta</a>
+    <a href="#how" class="btn-outline">How it works</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars" id="pillars">
+  <div class="section-label">Our foundations</div>
+  <h2 class="section-title">Built on four pillars</h2>
+  <p class="section-sub">Everything we build flows from these core values — so recovery is yours, on your terms.</p>
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>Anonymity</h3>
+      <p>Zero-knowledge proofs and proof-of-humanity technology mean you're real — but never exposed. Your identity stays yours.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <h3>Spirituality</h3>
+      <p>Drawing from AA, CBT, complex trauma models, meditation and art therapy — recovery pathways that honour the whole person.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>Community</h3>
+      <p>Peer-governed channels, group sessions with avatars, and a DAO where the community steers its own recovery infrastructure.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Self-Sovereignty</h3>
+      <p>On-chain reputation, DeFi incentives, and tokenised milestones give you ownership of your recovery journey — and your economic future.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="section-label" style="color: var(--teal-lt);">The journey</div>
+    <h2 class="section-title" style="color: var(--white);">How RecoHubz works</h2>
+    <p class="section-sub" style="color: rgba(255,255,255,0.45);">From first visit to long-term empowerment — every step is anonymous, voluntary and bespoke to you.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Land & Explore</h3>
+          <p>Arrive anonymously. Browse the resource library, read about high-functioning recovery patterns, and learn what RecoHubz offers — no sign-up required at this stage.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Prove Humanity, Not Identity</h3>
+          <p>Join using Proof-of-Humanity (ZK) — we confirm you're a real person without ever knowing who you are. Sign in via Gmail or wallet. Accept community guidelines.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>AI Triage & Questionnaire</h3>
+          <p>An AI guide walks you through a private questionnaire covering your situation, employment history and wellbeing. It maps your needs and suggests a bespoke pathway.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Choose Your Path</h3>
+          <p>Select from automated therapy information, real-world therapist referral, community support, or a hybrid pathway — all at your pace, all pseudonymous.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Grow & Contribute</h3>
+          <p>Build your on-chain recovery reputation, access the job board, join community channels, and participate in DAO governance — turning recovery into empowerment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label" style="color: var(--teal-lt);">What's inside</div>
+  <h2 class="section-title" style="color: var(--white);">Everything in one protocol</h2>
+  <p class="section-sub" style="color: rgba(255,255,255,0.4);">RecoHubz combines tools that have never existed together in one private, decentralised space.</p>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-tag">AI Triage</div>
+      <h3>Personalised Assessment</h3>
+      <p>AI-driven questionnaire identifies your situation and maps you to relevant therapy types, resources and community channels from day one.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-tag">Community</div>
+      <h3>Discord-Like Channels</h3>
+      <p>Topic-specific channels with avatar-based anonymity. Group sessions facilitated by addiction specialists. Peer support that actually feels safe.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-tag">Repository</div>
+      <h3>Recovery Resource Library</h3>
+      <p>Curated AA, CA, CBT and complex trauma resources. Meditation, music and art therapy guides. All freely accessible, always available.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-tag">Web3</div>
+      <h3>On-Chain Reputation</h3>
+      <p>Track recovery milestones anonymously on-chain. Build verifiable records of contribution and progress that travel with you — not tied to your name.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-tag">Economy</div>
+      <h3>Self-Sustaining DeFi</h3>
+      <p>A DAO-governed treasury funded by DeFi yield strategies. Funds flow back into care, incentives and platform development — not to shareholders.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-tag">Employment</div>
+      <h3>Job Board & Credit</h3>
+      <p>For those ready for a new start — access job listings, build creditworthiness on-chain, and transition from recovery into economic participation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band" id="join">
+  <h2>Ready to take the first step?</h2>
+  <p>Join our beta waitlist. No name needed. No judgment. Just a private door to a new beginning.</p>
+  <a href="mailto:info@recohubz.com" class="btn-white">Get Early Access</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Reco<span>Hubz</span></div>
+  <p>© 2025 RecoHubz. Recovery for the digital age.</p>
+  <div class="footer-links">
+    <a href="https://recoverz.gitbook.io/https-recohubz.com" target="_blank">Gitbook</a>
+    <a href="https://www.recohubz.com" target="_blank">Website</a>
+    <a href="mailto:info@recohubz.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

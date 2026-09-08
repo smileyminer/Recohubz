@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RecoHubz – Join</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #0F6E56; --teal-lt: #1D9E75; --teal-bg: #E1F5EE;
+    --dark: #0D1A14; --mid: #1A2D24; --mid2: #162720;
+    --white: #FFFFFF; --border: rgba(29,158,117,0.15);
+  }
+  html, body { height: 100%; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); display: flex; flex-direction: column; min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 5vw; border-bottom: 1px solid var(--border);
+    background: var(--mid2);
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; text-decoration: none; color: var(--white); }
+  .logo span { color: var(--teal-lt); }
+  .back-link { font-size: 0.82rem; color: rgba(255,255,255,0.35); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+  .back-link:hover { color: var(--white); }
+
+  main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 768px) { main { grid-template-columns: 1fr; } .left-panel { display: none; } }
+
+  .left-panel {
+    background: var(--mid); padding: 4rem 3rem;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .left-panel::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(29,158,117,0.1) 0%, transparent 70%);
+  }
+  .left-inner { position: relative; z-index: 1; }
+  .welcome-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal-lt); background: rgba(29,158,117,0.1); padding: 0.3rem 0.9rem;
+    border-radius: 50px; margin-bottom: 1.8rem; border: 1px solid rgba(29,158,117,0.25);
+  }
+  .left-inner h2 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+  .left-inner h2 em { font-style: normal; color: var(--teal-lt); }
+  .left-inner p { font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 2rem; }
+  .promise-list { display: flex; flex-direction: column; gap: 0.9rem; }
+  .promise-item { display: flex; align-items: flex-start; gap: 0.8rem; }
+  .p-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(29,158,117,0.12); border: 1px solid rgba(29,158,117,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.75rem; margin-top: 2px; }
+  .p-text strong { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 0.1rem; }
+  .p-text span { font-size: 0.75rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
+
+  .right-panel { padding: 3rem 4vw; display: flex; flex-direction: column; justify-content: center; max-width: 520px; margin: 0 auto; width: 100%; }
+
+  .step-indicator { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 2rem; }
+  .step-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: all 0.3s; }
+  .step-dot.active { background: var(--teal-lt); width: 22px; border-radius: 4px; }
+  .step-dot.done { background: var(--teal); }
+  .step-label { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-left: 0.5rem; }
+
+  .step-panel { display: none; animation: fadeUp 0.35s ease; }
+  .step-panel.active { display: block; }
+
+  .step-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; }
+  .step-sub { font-size: 0.85rem; color: rgba(255,255,255,0.4); line-height: 1.65; margin-bottom: 1.8rem; }
+
+  /* SIGNUP */
+  .signup-options { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.2rem; }
+  .signup-btn {
+    display: flex; align-items: center; gap: 0.8rem; padding: 0.85rem 1.1rem; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);
+    color: var(--white); font-size: 0.88rem; cursor: pointer; transition: all 0.2s;
+    text-align: left; width: 100%; font-family: 'DM Sans', sans-serif;
+  }
+  .signup-btn:hover { background: rgba(255,255,255,0.07); border-color: rgba(29,158,117,0.35); }
+  .signup-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .signup-btn .btn-arrow { margin-left: auto; color: rgba(255,255,255,0.2); }
+
+  .divider { display: flex; align-items: center; gap: 0.8rem; margin: 1rem 0; }
+  .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+  .divider span { font-size: 0.75rem; color: rgba(255,255,255,0.2); }
+
+  .form-group { margin-bottom: 0.85rem; }
+  .form-group label { display: block; font-size: 0.78rem; color: rgba(255,255,255,0.4); margin-bottom: 0.35rem; }
+  .form-group input {
+    width: 100%; padding: 0.8rem 0.9rem; border-radius: 10px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--white); font-size: 0.88rem; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: rgba(29,158,117,0.45); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.18); }
+
+  .btn-primary {
+    width: 100%; padding: 0.85rem; border-radius: 50px; background: var(--teal-lt); color: var(--white);
+    border: none; font-size: 0.9rem; font-weight: 500; cursor: pointer;
+    transition: background 0.2s, transform 0.15s; font-family: 'DM Sans', sans-serif; margin-top: 0.4rem;
+  }
+  .btn-primary:hover { background: var(--teal); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.35; pointer-events: none; }
+  .btn-ghost {
+    width: 100%; padding: 0.7rem; border-radius: 50px; background: transparent;
+    color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.82rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 0.4rem;
+  }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+  /* RULES */
+  .rules-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+  .rule-item { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.8rem 0.9rem; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+  .rule-emoji { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .rule-text strong { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 0.1rem; }
+  .rule-text span { font-size: 0.75rem; color: rgba(255,255,255,0.33); line-height: 1.5; }
+  .tc-agree { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.9rem; border-radius: 10px; background: rgba(29,158,117,0.05); border: 1px solid rgba(29,158,117,0.18); margin-bottom: 1rem; cursor: pointer; }
+  .tc-agree input[type="checkbox"] { margin-top: 3px; accent-color: var(--teal-lt); flex-shrink: 0; }
+  .tc-agree label { font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.5; cursor: pointer; }
+  .tc-agree label a { color: var(--teal-lt); text-decoration: none; }
+
+  /* POH */
+  .poh-card { background: rgba(29,158,117,0.06); border: 1px solid rgba(29,158,117,0.18); border-radius: 14px; padding: 1.4rem; margin-bottom: 1.4rem; text-align: center; }
+  .poh-shield { width: 52px; height: 52px; border-radius: 50%; background: rgba(29,158,117,0.12); border: 1px solid rgba(29,158,117,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.9rem; }
+  .poh-shield svg { width: 24px; height: 24px; stroke: var(--teal-lt); fill: none; stroke-width: 1.8; }
+  .poh-card h3 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .poh-card p { font-size: 0.78rem; color: rgba(255,255,255,0.4); line-height: 1.65; }
+  .zk-badge { display: inline-block; margin-top: 0.65rem; font-size: 0.67rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-lt); background: rgba(29,158,117,0.1); padding: 0.2rem 0.7rem; border-radius: 50px; border: 1px solid rgba(29,158,117,0.22); }
+
+  /* QUESTIONNAIRE */
+  .q-progress { margin-bottom: 1.4rem; }
+  .q-progress-bar { height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .q-progress-fill { height: 100%; background: var(--teal-lt); border-radius: 2px; transition: width 0.4s ease; }
+  .q-progress-label { font-size: 0.72rem; color: rgba(255,255,255,0.25); margin-top: 0.35rem; text-align: right; }
+
+  .q-block { margin-bottom: 1.2rem; }
+  .q-block label { display: block; font-size: 0.88rem; font-weight: 500; margin-bottom: 0.7rem; line-height: 1.5; }
+  .q-options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .q-option {
+    display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.9rem; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02);
+    cursor: pointer; transition: all 0.18s; font-size: 0.85rem;
+  }
+  .q-option:hover { border-color: rgba(29,158,117,0.35); background: rgba(29,158,117,0.05); }
+  .q-option.selected { border-color: rgba(29,158,117,0.5); background: rgba(29,158,117,0.1); color: var(--white); }
+  .q-option input { accent-color: var(--teal-lt); flex-shrink: 0; }
+
+  .q-select {
+    width: 100%; padding: 0.8rem 0.9rem; border-radius: 10px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--white); font-size: 0.88rem; font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color 0.2s; appearance: none; cursor: pointer;
+  }
+  .q-select:focus { border-color: rgba(29,158,117,0.45); }
+  .q-select option { background: #1A2D24; color: var(--white); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="recohubz-landing.html" class="logo">Reco<span>Hubz</span></a>
+  <a href="recohubz-landing.html" class="back-link">← Back to home</a>
+</nav>
+
+<main>
+  <div class="left-panel">
+    <div class="left-inner">
+      <div class="welcome-tag">You're safe here</div>
+      <h2>A new beginning starts<br/>with <em>one step</em></h2>
+      <p>No judgement. No identity required. RecoHubz meets you exactly where you are — and walks with you from there.</p>
+      <div class="promise-list">
+        <div class="promise-item">
+          <div class="p-icon">🛡️</div>
+          <div class="p-text"><strong>Full anonymity, always</strong><span>ZK proofs verify you're human — never who you are.</span></div>
+        </div>
+        <div class="promise-item">
+          <div class="p-icon">💚</div>
+          <div class="p-text"><strong>Built with lived experience</strong><span>Designed alongside addiction specialists and people in recovery.</span></div>
+        </div>
+        <div class="promise-item">
+          <div class="p-icon">⏱️</div>
+          <div class="p-text"><strong>Your pace, your choice</strong><span>No pressure. Every step is optional.</span></div>
+        </div>
+        <div class="promise-item">
+          <div class="p-icon">🌱</div>
+          <div class="p-text"><strong>Community-governed</strong><span>Run by members, not shareholders.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="step-indicator">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+      <div class="step-dot" id="dot-4"></div>
+      <div class="step-dot" id="dot-5"></div>
+      <span class="step-label" id="step-label">Step 1 of 5</span>
+    </div>
+
+    <!-- STEP 1: Sign up -->
+    <div class="step-panel active" id="step-1">
+      <h2 class="step-title">Join RecoHubz</h2>
+      <p class="step-sub">Choose how you'd like to get started. All options are equally private.</p>
+      <div class="signup-options">
+        <button class="signup-btn" onclick="nextStep()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Continue with Google
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="signup-btn" onclick="showEmailForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Continue with Email
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="signup-btn" onclick="nextStep()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>
+          Connect Crypto Wallet
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+      <div id="email-form" style="display:none;">
+        <div class="divider"><div class="divider-line"></div><span>or enter details</span><div class="divider-line"></div></div>
+        <div class="form-group"><label>Email address</label><input type="email" placeholder="you@example.com" /></div>
+        <div class="form-group"><label>Password</label><input type="password" placeholder="At least 8 characters" /></div>
+        <button class="btn-primary" onclick="nextStep()">Create Account →</button>
+      </div>
+      <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:1rem;line-height:1.6;">Your real identity is never stored or shared.</p>
+    </div>
+
+    <!-- STEP 2: Community Rules -->
+    <div class="step-panel" id="step-2">
+      <h2 class="step-title">Our community values</h2>
+      <p class="step-sub">These values protect every member — including you. Please read before continuing.</p>
+      <div class="rules-list">
+        <div class="rule-item"><div class="rule-emoji">🤝</div><div class="rule-text"><strong>Respect above all</strong><span>Treat every member with the dignity you'd want for yourself. No exceptions.</span></div></div>
+        <div class="rule-item"><div class="rule-emoji">🔒</div><div class="rule-text"><strong>What's shared here, stays here</strong><span>Never share another member's story or identity outside this community.</span></div></div>
+        <div class="rule-item"><div class="rule-emoji">💚</div><div class="rule-text"><strong>No unsolicited advice</strong><span>Listen first. Offer support only when asked. Everyone's path is their own.</span></div></div>
+        <div class="rule-item"><div class="rule-emoji">🚫</div><div class="rule-text"><strong>Zero tolerance for harm</strong><span>Harassment or hate speech will result in immediate removal.</span></div></div>
+        <div class="rule-item"><div class="rule-emoji">🌱</div><div class="rule-text"><strong>Progress, not perfection</strong><span>Relapse is part of recovery. Shame has no place here.</span></div></div>
+      </div>
+      <div class="tc-agree">
+        <input type="checkbox" id="agree-check" onchange="toggleAgree()" />
+        <label for="agree-check">I agree to uphold these values and have read the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>.</label>
+      </div>
+      <button class="btn-primary" id="agree-btn" onclick="nextStep()" disabled>I Agree — Continue →</button>
+    </div>
+
+    <!-- STEP 3: POH -->
+    <div class="step-panel" id="step-3">
+      <h2 class="step-title">Prove you're human —<br/>not who you are</h2>
+      <p class="step-sub">Zero-knowledge technology verifies you're real. We never see or store your identity.</p>
+      <div class="poh-card">
+        <div class="poh-shield"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Zero-Knowledge Proof of Humanity</h3>
+        <p>Your verification is encrypted and anonymous. We confirm you are human — not your name, location or identity. Even we cannot trace it back to you.</p>
+        <div class="zk-badge">ZK Protected · Fully Anonymous</div>
+      </div>
+      <button class="btn-primary" onclick="nextStep()">✓ Verify — I am Human</button>
+      <button class="btn-ghost" onclick="nextStep()">Skip for now (beta only)</button>
+    </div>
+
+    <!-- STEP 4: Triage Questionnaire -->
+    <div class="step-panel" id="step-4">
+      <h2 class="step-title">Help us understand<br/>where you are</h2>
+      <p class="step-sub">Completely private, anonymous and optional. This helps us find your best pathway.</p>
+      <div class="q-progress">
+        <div class="q-progress-bar"><div class="q-progress-fill" id="q-fill" style="width:20%"></div></div>
+        <div class="q-progress-label" id="q-label">Question 1 of 5</div>
+      </div>
+
+      <!-- Q1: Who are you here for? -->
+      <div id="q1" class="q-block">
+        <label>Who are you here for today?</label>
+        <div class="q-options">
+          <div class="q-option" onclick="selectQ('q1', 'self', this)"><input type="radio" name="q1" /> Myself — I am personally affected</div>
+          <div class="q-option" onclick="selectQ('q1', 'family', this)"><input type="radio" name="q1" /> A family member or loved one</div>
+          <div class="q-option" onclick="selectQ('q1', 'employer', this)"><input type="radio" name="q1" /> An employee or colleague</div>
+          <div class="q-option" onclick="selectQ('q1', 'explore', this)"><input type="radio" name="q1" /> Just exploring — not sure yet</div>
+        </div>
+        <button class="btn-primary" style="margin-top:0.9rem;" onclick="showQ(2)" id="q1-next" disabled>Next →</button>
+      </div>
+
+      <!-- Q2: Main area (shown based on Q1) -->
+      <div id="q2" class="q-block" style="display:none;">
+        <label id="q2-label">Which area feels most relevant to you?</label>
+        <div class="q-options" id="q2-options">
+          <!-- Populated by JS based on Q1 -->
+        </div>
+        <button class="btn-primary" style="margin-top:0.9rem;" onclick="showQ(3)" id="q2-next" disabled>Next →</button>
+      </div>
+
+      <!-- Q3: UK City -->
+      <div id="q3" class="q-block" style="display:none;">
+        <label>Which UK city or region are you based in?</label>
+        <select class="q-select" id="q3-select" onchange="selectCity(this)">
+          <option value="">— Select your city —</option>
+          <option value="london">London</option>
+          <option value="birmingham">Birmingham</option>
+          <option value="manchester">Manchester</option>
+          <option value="leeds">Leeds</option>
+          <option value="liverpool">Liverpool</option>
+          <option value="brighton">Brighton</option>
+          <option value="other">Other / Prefer not to say</option>
+        </select>
+        <button class="btn-primary" style="margin-top:0.9rem;" onclick="showQ(4)" id="q3-next" disabled>Next →</button>
+      </div>
+
+      <!-- Q4: Support type -->
+      <div id="q4" class="q-block" style="display:none;">
+        <label>What kind of support are you most interested in?</label>
+        <div class="q-options">
+          <div class="q-option" onclick="selectQ('q4', 'community', this)"><input type="radio" name="q4" /> Peer community — talking to people who understand</div>
+          <div class="q-option" onclick="selectQ('q4', 'resources', this)"><input type="radio" name="q4" /> Self-guided resources — reading and learning at my own pace</div>
+          <div class="q-option" onclick="selectQ('q4', 'therapy', this)"><input type="radio" name="q4" /> Real-world therapy or treatment referral</div>
+          <div class="q-option" onclick="selectQ('q4', 'all', this)"><input type="radio" name="q4" /> All of the above — open to everything</div>
+        </div>
+        <button class="btn-primary" style="margin-top:0.9rem;" onclick="showQ(5)" id="q4-next" disabled>Next →</button>
+      </div>
+
+      <!-- Q5: Open text -->
+      <div id="q5" class="q-block" style="display:none;">
+        <label>Is there anything else you'd like us to know? (completely optional)</label>
+        <textarea style="width:100%;padding:0.8rem;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--white);font-size:0.85rem;font-family:'DM Sans',sans-serif;resize:vertical;min-height:80px;outline:none;line-height:1.6;" placeholder="Share as much or as little as you like. This stays private and anonymous."></textarea>
+        <button class="btn-primary" style="margin-top:0.9rem;" onclick="goToResults()">See My Pathway →</button>
+        <button class="btn-ghost" onclick="goToResults()">Skip & see pathway</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Going to results -->
+    <div class="step-panel" id="step-5">
+      <div style="text-align:center;padding:2rem 0;">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(29,158,117,0.15);border:2px solid rgba(29,158,117,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;animation:popIn 0.5s ease;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="step-title">Building your pathway...</h2>
+        <p style="font-size:0.88rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Matching your answers to the right support.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  let currentStep = 1;
+  const answers = { who: '', area: '', city: '', support: '' };
+
+  const q2OptionsSelf = [
+    { val: 'alcohol', label: '🍺 Alcohol or substance use' },
+    { val: 'behavioural', label: '🎰 Behavioural addiction (gambling, trading, social media)' },
+    { val: 'mental-health', label: '🧠 Mental health or complex trauma' },
+    { val: 'spirituality', label: '🌿 Spiritual or inner wellbeing' },
+    { val: 'employment', label: '💼 Employment & rebuilding my life' },
+    { val: 'recovery', label: '🌱 General recovery support' },
+  ];
+  const q2OptionsFamily = [
+    { val: 'general', label: '👨‍👩‍👧 Supporting a family member or loved one' },
+    { val: 'alcohol', label: '🍺 They are affected by alcohol or substances' },
+    { val: 'behavioural', label: '🎰 They are affected by behavioural addiction' },
+    { val: 'mental-health', label: '🧠 They are experiencing mental health challenges' },
+  ];
+  const q2OptionsEmployer = [
+    { val: 'general', label: '🏢 Understanding addiction in the workplace' },
+    { val: 'employment', label: '💼 Supporting an employee through recovery' },
+    { val: 'mental-health', label: '🧠 Mental health support resources for staff' },
+  ];
+  const q2OptionsExplore = [
+    { val: 'general', label: '👋 Just browsing — show me everything' },
+    { val: 'recovery', label: '🌱 Recovery support generally' },
+    { val: 'community', label: '👥 I want to find community' },
+  ];
+
+  function updateDots() {
+    for (let i = 1; i <= 5; i++) {
+      const d = document.getElementById('dot-' + i);
+      d.className = 'step-dot';
+      if (i < currentStep) d.classList.add('done');
+      else if (i === currentStep) d.classList.add('active');
+    }
+    document.getElementById('step-label').textContent = 'Step ' + currentStep + ' of 5';
+  }
+
+  function nextStep() {
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep = Math.min(currentStep + 1, 5);
+    document.getElementById('step-' + currentStep).classList.add('active');
+    updateDots();
+    window.scrollTo(0, 0);
+  }
+
+  function showEmailForm() {
+    const f = document.getElementById('email-form');
+    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function toggleAgree() {
+    document.getElementById('agree-btn').disabled = !document.getElementById('agree-check').checked;
+  }
+
+  function selectQ(qid, val, el) {
+    document.querySelectorAll(`[onclick*="'${qid}'"]`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    answers[qid === 'q1' ? 'who' : 'support'] = val;
+    document.getElementById(qid + '-next').disabled = false;
+
+    if (qid === 'q1') {
+      // populate Q2 based on answer
+      let opts = q2OptionsSelf;
+      if (val === 'family') opts = q2OptionsFamily;
+      else if (val === 'employer') opts = q2OptionsEmployer;
+      else if (val === 'explore') opts = q2OptionsExplore;
+      const container = document.getElementById('q2-options');
+      container.innerHTML = opts.map(o =>
+        `<div class="q-option" onclick="selectArea('${o.val}', this)"><input type="radio" name="q2" /> ${o.label}</div>`
+      ).join('');
+      document.getElementById('q2-label').textContent =
+        val === 'employer' ? 'What are you looking for support with?' :
+        val === 'family' ? 'What is your loved one dealing with?' :
+        'Which area feels most relevant to you?';
+    }
+  }
+
+  function selectArea(val, el) {
+    document.querySelectorAll('#q2-options .q-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    answers.area = val;
+    document.getElementById('q2-next').disabled = false;
+  }
+
+  function selectCity(sel) {
+    answers.city = sel.value;
+    document.getElementById('q3-next').disabled = !sel.value;
+  }
+
+  function showQ(num) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('q' + i);
+      if (el) el.style.display = i === num ? 'block' : 'none';
+    }
+    const pct = (num / 5) * 100;
+    document.getElementById('q-fill').style.width = pct + '%';
+    document.getElementById('q-label').textContent = 'Question ' + num + ' of 5';
+  }
+
+  function goToResults() {
+    // Store answers for results page
+    sessionStorage.setItem('rh_answers', JSON.stringify(answers));
+    nextStep();
+    setTimeout(() => {
+      window.location.href = 'recohubz-triage-results.html';
+    }, 1200);
+  }
+</script>
+</body>
+</html>
